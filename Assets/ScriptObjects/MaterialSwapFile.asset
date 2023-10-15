@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 64b9a08686d5d1b4d921a3857d0f76ee, type: 3}
+  m_Name: MaterialSwapFile
+  m_EditorClassIdentifier: 
+  _materials:
+  - MaterialName: NormalMaterial
+    MaterialInstance: {fileID: 2100000, guid: 306ba09867be11848bcc8f22cd955c63, type: 2}
+  - MaterialName: SelectedMaterial
+    MaterialInstance: {fileID: 2100000, guid: 2457c25929072b3498abca1bdf71951d, type: 2}
+  - MaterialName: OccupiedMaterial
+    MaterialInstance: {fileID: 2100000, guid: 7baf581a45c7ac545b82bb936072fdca, type: 2}

@@ -6,7 +6,7 @@ namespace Core.Card
 {
     public class GridContainer : MonoBehaviour
     {
-        [SerializeField] private Grid _pf_Grid;
+        [SerializeField] private BuildingGrid _pf_Grid;
         [Min(1)]
         [SerializeField] private int _gridNumberX = 1;
         [Min(1)]
@@ -22,7 +22,7 @@ namespace Core.Card
         [SerializeField] private bool _isPositiveZ = true;
 
 
-        public List<Grid> grids = new List<Grid>();
+        public List<BuildingGrid> grids = new List<BuildingGrid>();
         public List<Vector3> positionList = new List<Vector3>();
 
         public void CreateGrid()
@@ -30,7 +30,7 @@ namespace Core.Card
             ClearGrid();
             for (int i = 0; i < _totalGridNumber; i++)
             {
-                Grid grid = Instantiate(_pf_Grid, transform);
+                BuildingGrid grid = Instantiate(_pf_Grid, transform);
                 grids.Add(grid);
             }
             AssignGridPosition();
