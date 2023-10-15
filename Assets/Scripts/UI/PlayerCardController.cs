@@ -24,5 +24,6 @@ public class PlayerCardController : MonoBehaviour
     public void EnableCardPlacementButton(int buttonIndex, bool enabledCard)
     {
         playerCards[buttonIndex].GetComponent<Button>().interactable = enabledCard;
+        playerCards[buttonIndex].EnableEventTrigger(enabledCard);
     }
 }

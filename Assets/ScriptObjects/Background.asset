@@ -13,5 +13,5 @@ MonoBehaviour:
   m_Name: Background
   m_EditorClassIdentifier: 
   Sprites:
-  - {fileID: 21300000, guid: a16e204e374a3c44fb38908af82310a9, type: 3}
   - {fileID: 21300000, guid: b2d0bcdc1aa4f0c449b47c5481ef59d3, type: 3}
+  folderPath: Sprites/Background

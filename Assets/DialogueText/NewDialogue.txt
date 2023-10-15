@@ -1,9 +1,10 @@
 [BACKGROUND=Scene_0_0]
 [CHAR=ABC_NORMAL]
-[NAME=ABC]
-Hello
+[NAME=王美麗]
+哈囉
 Whats your Name
 
+[CHAR=CBA_NORMAL]
 [NAME=CBA]
 Hi
 MyNameIsCBA

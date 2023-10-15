@@ -44,6 +44,11 @@ public class CustomButton : MonoBehaviour
         _eventTrigger.triggers.Add(OnClickEvent);
     }
 
+    public void EnableEventTrigger(bool enableTrigger)
+    {
+        _eventTrigger.enabled = enableTrigger;
+    }
+
     public void AddButtonEnterEvent(Action eventCallback)
     {
         OnEnterEvent.callback.AddListener(delegate

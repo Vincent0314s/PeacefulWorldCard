@@ -14,15 +14,16 @@ public class CardPlacementController : MonoBehaviour
     }
 
     //Change to reference from GameMB
+    [Header("Placement")]
     [SerializeField] private PlayerCardController _playerCardController;
 
     [SerializeField] private CardObjectOnBoardSO _cardObjectSO;
     private CardPlacementObject currentCreatedObject;
-    private Camera _mainCam;
-
     public LayerMask buildingTileMask;
+
     private BuildingGrid _currentTile;
     private BuildingGrid _previousTitle;
+    private Camera _mainCam;
 
 
     //Put this to Rule SO?
@@ -30,11 +31,12 @@ public class CardPlacementController : MonoBehaviour
     public const int ShieldMaximumNumber = 5;
     public const int CannonMaximumNumber = 3;
 
+    [Header("Card On Boards")]
     public CardRecordOnBoard PlayerCardRecord;
     public CardRecordOnBoard EnemyCardRecord;
 
 
-    [Header("Events"), Space()]
+    [Header("Events")]
     [SerializeField] private GameEventSO _onFlagPlacedEvent;
     [SerializeField] private GameEventSO _onShieldPlacedEvent;
     [SerializeField] private GameEventSO _onCannonPlacedEvent;
@@ -56,28 +58,6 @@ public class CardPlacementController : MonoBehaviour
 
     public void CreateCardObject(EnumDefs.Card cardType)
     {
-        switch (cardType)
-        {
-            case EnumDefs.Card.Flag:
-                if (PlayerCardRecord.CurrentFlagNumber >= FlagMaximumNumber)
-                {
-                    return;
-                }
-                break;
-            case EnumDefs.Card.Shield:
-                if (PlayerCardRecord.CurrentShieldNumber >= ShieldMaximumNumber)
-                {
-                    return;
-                }
-                break;
-            case EnumDefs.Card.Cannon:
-                if (PlayerCardRecord.CurrentCannonNumber >= CannonMaximumNumber)
-                {
-                    return;
-                }
-                break;
-        }
-
         if (currentCreatedObject.CardObject == null)
         {
             currentCreatedObject.CardObject = Instantiate(_cardObjectSO.GetCardObjectByType(cardType));
