@@ -8,7 +8,7 @@ public class DialogueController : MonoBehaviour
     public TextAsset DialogueTest;
 
     public TextMeshProUGUI CharacterNameText;
-    public TextMeshProUGUI DialogueContext;
+    public TMP_Animated DialogueContext;
     public Image BGImage;
     [SerializeField] private SpriteListSO backgroundSO;
     public List<string> AllDialogues = new List<string>();
@@ -68,7 +68,8 @@ public class DialogueController : MonoBehaviour
             }
             else
             {
-                DialogueContext.text = line;
+                //DialogueContext.text = line;
+                DialogueContext.ReadText(line);
                 DialogueIndex = i;
                 return;
             }
