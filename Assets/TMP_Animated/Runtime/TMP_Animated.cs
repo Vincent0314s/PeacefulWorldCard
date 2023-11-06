@@ -23,7 +23,9 @@ namespace TMPro
         public TextRevealEvent onTextReveal;
         public DialogueEvent onDialogueFinish;
 
-        public void ReadText(string newText)
+        public bool IsLineFinished;
+
+        private string GetDisplayTextLine(string newText)
         {
             text = string.Empty;
             // split the whole text into parts based off the <> tags 
@@ -32,31 +34,52 @@ namespace TMPro
 
             // textmeshpro still needs to parse its built-in tags, so we only include noncustom tags
             string displayText = "";
-            for (int i = 0; i < subTexts.Length; i++)
-            {
-                if (i % 2 == 0)
-                    displayText += subTexts[i];
-                else if (!isCustomTag(subTexts[i].Replace(" ", "")))
-                    displayText += $"<{subTexts[i]}>";
-            }
+
             // check to see if a tag is our own
             bool isCustomTag(string tag)
             {
                 return tag.StartsWith("speed=") || tag.StartsWith("pause=") || tag.StartsWith("emotion=") || tag.StartsWith("action");
             }
 
-            // send that string to textmeshpro and hide all of it, then start reading
-            text = displayText;
-            maxVisibleCharacters = 0;
-            StartCoroutine(Read());
 
-            IEnumerator Read()
+            for (int i = 0; i < subTexts.Length; i++)
+            {
+                if (i % 2 == 0)
+                {
+                    displayText += subTexts[i];
+                }
+                else if (!isCustomTag(subTexts[i].Replace(" ", "")))
+                {
+                    displayText += $"<{subTexts[i]}>";
+                }
+            }
+            return displayText;
+        }
+
+        public void RevealAll(string newText)
+        {
+            // send that string to textmeshpro and hide all of it, then start reading
+            text = GetDisplayTextLine(newText);
+            maxVisibleCharacters = text.Length;
+            IsLineFinished = true;
+            onDialogueFinish.Invoke();
+        }
+
+        public void ReadText(string newText)
+        {
+            string[] subTexts = newText.Split('<', '>');
+            // send that string to textmeshpro and hide all of it, then start reading
+            text = GetDisplayTextLine(newText);
+            maxVisibleCharacters = 0;
+            IsLineFinished = false;
+            StartCoroutine(ReadCoroutine());
+
+            IEnumerator ReadCoroutine()
             {
                 int subCounter = 0;
                 int visibleCounter = 0;
                 while (subCounter < subTexts.Length)
                 {
-                    // if 
                     if (subCounter % 2 == 1)
                     {
                         yield return EvaluateTag(subTexts[subCounter].Replace(" ", ""));
@@ -99,6 +122,7 @@ namespace TMPro
                     }
                     return null;
                 }
+                IsLineFinished = true;
                 onDialogueFinish.Invoke();
             }
         }

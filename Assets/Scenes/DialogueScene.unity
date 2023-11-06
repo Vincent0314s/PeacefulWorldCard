@@ -135,6 +135,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &497699235 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 160915760404093096, guid: b906d1a217248aa449990c6a66005246,
+    type: 3}
+  m_PrefabInstance: {fileID: 160915761747829566}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &649178482 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 160915761299983948, guid: b906d1a217248aa449990c6a66005246,
@@ -176,13 +188,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e0c14c8fdeb8d97468891a503ff3c56e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DialogueTest: {fileID: 4900000, guid: e3a81b069da6f264c96007e7b9a1468a, type: 3}
+  DialogueTest:
+  - {fileID: 4900000, guid: e3a81b069da6f264c96007e7b9a1468a, type: 3}
+  - {fileID: 4900000, guid: c526b2a968da9fa4d925c0d18b10005f, type: 3}
   CharacterNameText: {fileID: 649178482}
   DialogueContext: {fileID: 1436443403}
   BGImage: {fileID: 206224847}
-  backgroundSO: {fileID: 11400000, guid: 3668b480f57f26e4f9658e40a894df9e, type: 2}
+  CharacterImage: {fileID: 497699235}
+  _backgroundSO: {fileID: 11400000, guid: 3668b480f57f26e4f9658e40a894df9e, type: 2}
+  _characterSO: {fileID: 11400000, guid: d31a7e16a6d04eb41a17c707f8b4578f, type: 2}
   AllDialogues: []
-  DialogueIndex: 0
+  CurrentDialogueList: []
+  TotalDialogueIndex: 0
+  CurrentDialogueIndex: 0
 --- !u!4 &775346325
 Transform:
   m_ObjectHideFlags: 0

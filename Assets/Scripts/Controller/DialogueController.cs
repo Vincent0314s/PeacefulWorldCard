@@ -5,20 +5,23 @@ using TMPro;
 using UnityEngine.UI;
 public class DialogueController : MonoBehaviour
 {
-    public TextAsset DialogueTest;
+    public TextAsset[] DialogueTest;
 
     public TextMeshProUGUI CharacterNameText;
     public TMP_Animated DialogueContext;
     public Image BGImage;
-    [SerializeField] private SpriteListSO backgroundSO;
+    public Image CharacterImage;
+    [SerializeField] private SpriteListSO _backgroundSO;
+    [SerializeField] private SpriteListSO _characterSO;
     public List<string> AllDialogues = new List<string>();
+    public List<string> CurrentDialogueList = new List<string>();
 
-    public int DialogueIndex;
-
+    public int TotalDialogueIndex;
+    public int CurrentDialogueIndex;
 
     private void Start()
     {
-        ReadDialogueFromTextFile();
+        ReadDialogueFromTextFile(0);
         ReadDialogueByIndex();
     }
 
@@ -26,14 +29,50 @@ public class DialogueController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Mouse0))
         {
+            if (!DialogueContext.IsLineFinished)
+            {
+                ReadDialogueByLine();
+            }
+            else
+            {
+                ReadDialogueByIndex();
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            if (CurrentDialogueIndex > 0)
+            {
+                CurrentDialogueIndex--;
+                DialogueContext.ReadText(CurrentDialogueList[CurrentDialogueIndex]);
+            }
+        }
+        if (Input.GetKeyDown(KeyCode.D))
+        {
+            if (CurrentDialogueIndex < CurrentDialogueList.Count - 1)
+            {
+                CurrentDialogueIndex++;
+                DialogueContext.ReadText(CurrentDialogueList[CurrentDialogueIndex]);
+            }
+        }
+
+        if (Input.GetKeyDown(KeyCode.Alpha1))
+        {
+            ReadDialogueFromTextFile(0);
+            ReadDialogueByIndex();
+        }
+        if (Input.GetKeyDown(KeyCode.Alpha2))
+        {
+            ReadDialogueFromTextFile(1);
             ReadDialogueByIndex();
         }
     }
 
-    public void ReadDialogueFromTextFile()
+    public void ReadDialogueFromTextFile(int dialogueIndex)
     {
-        string allText = DialogueTest.text;
+        string allText = DialogueTest[dialogueIndex].text;
         string[] textByline = allText.Split(System.Environment.NewLine.ToCharArray());
+        AllDialogues.Clear();
         foreach (var line in textByline)
         {
             if (!string.IsNullOrEmpty(line))
@@ -41,21 +80,26 @@ public class DialogueController : MonoBehaviour
                 AllDialogues.Add(line);
             }
         }
+        TotalDialogueIndex = 0;
+        CurrentDialogueIndex = 0;
+        CurrentDialogueList.Clear();
     }
+
 
     public void ReadDialogueByIndex()
     {
-        if (DialogueIndex > 0 && DialogueIndex < AllDialogues.Count - 1)
+        if (TotalDialogueIndex > 0 && TotalDialogueIndex < AllDialogues.Count - 1)
         {
-            DialogueIndex++;
+            TotalDialogueIndex++;
         }
-        for (int i = DialogueIndex; i < AllDialogues.Count; i++)
+
+        for (int i = TotalDialogueIndex; i < AllDialogues.Count; i++)
         {
             string line = AllDialogues[i];
             if (line.Contains("[BACKGROUND"))
             {
                 string backgroundName = line.Substring(line.IndexOf('=') + 1, line.IndexOf(']') - (line.IndexOf('=') + 1));
-                BGImage.sprite = backgroundSO.GetSpriteByName(backgroundName);
+                BGImage.sprite = _backgroundSO.GetSpriteByName(backgroundName);
             }
             else if (line.Contains("[NAME"))
             {
@@ -64,15 +108,26 @@ public class DialogueController : MonoBehaviour
             }
             else if (line.Contains("[CHAR"))
             {
-                Debug.Log("Assign Character Sprite");
+                string charName = line.Substring(line.IndexOf('=') + 1, line.IndexOf(']') - (line.IndexOf('=') + 1));
+                CharacterImage.sprite = _characterSO.GetSpriteByName(charName);
             }
             else
             {
-                //DialogueContext.text = line;
                 DialogueContext.ReadText(line);
-                DialogueIndex = i;
+                if (!CurrentDialogueList.Contains(line))
+                {
+                    CurrentDialogueList.Add(line);
+                }
+                CurrentDialogueIndex = CurrentDialogueList.Count - 1;
+                TotalDialogueIndex = i;
                 return;
             }
         }
+    }
+
+    public void ReadDialogueByLine()
+    {
+        string line = AllDialogues[TotalDialogueIndex];
+        DialogueContext.RevealAll(line);
     }
 }

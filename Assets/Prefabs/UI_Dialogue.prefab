@@ -59,7 +59,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 0.9272806, b: 0.38113207, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -144,8 +144,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: da54b2cbc4710ea4c958ff1da6689f0d, type: 2}
-  m_sharedMaterial: {fileID: -4490685031239480258, guid: da54b2cbc4710ea4c958ff1da6689f0d,
+  m_fontAsset: {fileID: 11400000, guid: a232f6f412538c742962e3648f0378ad, type: 2}
+  m_sharedMaterial: {fileID: -7980750777703865285, guid: a232f6f412538c742962e3648f0378ad,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -225,6 +225,7 @@ MonoBehaviour:
   onDialogueFinish:
     m_PersistentCalls:
       m_Calls: []
+  IsLineFinished: 0
 --- !u!1 &160915761175071891
 GameObject:
   m_ObjectHideFlags: 0
@@ -371,8 +372,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Name
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: da54b2cbc4710ea4c958ff1da6689f0d, type: 2}
-  m_sharedMaterial: {fileID: -4490685031239480258, guid: da54b2cbc4710ea4c958ff1da6689f0d,
+  m_fontAsset: {fileID: 11400000, guid: a232f6f412538c742962e3648f0378ad, type: 2}
+  m_sharedMaterial: {fileID: -7980750777703865285, guid: a232f6f412538c742962e3648f0378ad,
     type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
@@ -498,7 +499,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 0.21698111, g: 0.21698111, b: 0.21698111, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

@@ -1,5 +1,5 @@
 ﻿[BACKGROUND=ground]
-[CHAR=president］
+[CHAR=president]
 [NAME=校長]
 「一日之計在於晨」，剛才我到達學校時，
 就見到老師和同學笑容燦爛，精神奕奕，
@@ -40,14 +40,15 @@
 拓寬自己的眼界，令自己的夢想更加遠大。
 
 
-接下來讓我介紹各位老師，首先是……
+接下來讓我介紹各位老師，首先是⋯⋯
+
 
 [NAME=同學]
 Zzz…Zzz…
 
 
 [BACKGROUND=classroom_a]
-[CHAR=misschen］
+[CHAR=misschen_normal]
 [NAME=老師]
 各位同學，我是MissChen，是你們的班主任。
 早會時校長說了一大堆。
@@ -59,7 +60,7 @@ Zzz…Zzz…
 知～道～
 
 
-[CHAR=misschen］
+[CHAR=misschen_normal]
 [NAME=老師]
 好。接下來選一下班長，誰成績好又載眼鏡的舉手。
 
@@ -155,12 +156,12 @@ _，你知道嗎，天下太平是80-90年代流行的小遊戲。小朋友們�
 
 
 [BACKGROUND=classroom_workshop]
-[CHAR=girl_one_think］
+[CHAR=girl_one_think]
 [NAME=女主]
 這裡就是天下太平學會。為什麼他們都戴著奇怪的東西？
 
 
-[CHAR=boy_two_normal］
+[CHAR=boy_two_normal]
 [NAME=???]
 他們是在用VR。
 
@@ -222,7 +223,7 @@ buff欄要有空位才會更新。
 對丫 ，我叫男二。
 
 
-[CHAR=leader_normal］
+[CHAR=leader_normal]
 [NAME=學會會長]
 你們是一年級生吧，要加入學會嗎，可以優先使用這裡的設備喔。
 
@@ -235,17 +236,17 @@ buff欄要有空位才會更新。
 這位女生呢，要一齊玩嗎？
 
 
-[CHAR=girl_one_normal］
+[CHAR=girl_one_normal]
 [NAME=女主]
 主角加入我都加入。
 
 
-[CHAR=boy_two_smile］
+[CHAR=boy_two_smile]
 [NAME=男二]
 啊？
 
 
-[CHAR=leader_normal］
+[CHAR=leader_normal]
 [NAME=學會會長]
 好，來這邊簽名。每天放學後都可以來。
 
