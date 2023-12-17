@@ -41,6 +41,19 @@ public class CardPlacementController : MonoBehaviour
     [SerializeField] private GameEventSO _onShieldPlacedEvent;
     [SerializeField] private GameEventSO _onCannonPlacedEvent;
 
+    [Header("Shield")]
+    [SerializeField] private SpriteRenderer[] _shieldSpriteRenderers;
+    [SerializeField] private SpriteRenderer[] _enemyShieldSpriteRenderers;
+    [SerializeField] private Color _ghostColor;
+    [SerializeField] private Color _solidColor;
+
+    [SerializeField] private GameStateController _gameStateController;
+    [SerializeField] private BuildingGrid[] _enemyBuildingGrid;
+    private List<BuildingGrid> _availableEnemyBuildingGrid;
+
+    private CardPlacementObject currentEnemyCreatedObject;
+    private BuildingGrid _currentEnemyTile;
+
     private bool _isHoldingCard;
 
     private void Awake()
@@ -52,8 +65,10 @@ public class CardPlacementController : MonoBehaviour
     {
         //Get Buttom from Name or Enum instead of number.
         _playerCardController.SubscribeButtonDownEvent(0, () => CreateCardObject(EnumDefs.Card.Flag));
-        _playerCardController.SubscribeButtonDownEvent(1, () => CreateCardObject(EnumDefs.Card.Shield));
+        _playerCardController.SubscribeButtonDownEvent(1, () => PlaceShield());
         _playerCardController.SubscribeButtonDownEvent(2, () => CreateCardObject(EnumDefs.Card.Cannon));
+
+        _availableEnemyBuildingGrid = new List<BuildingGrid>(_enemyBuildingGrid);
     }
 
     public void CreateCardObject(EnumDefs.Card cardType)
@@ -68,35 +83,148 @@ public class CardPlacementController : MonoBehaviour
 
     private void Update()
     {
-        if (_isHoldingCard)
+        if (_gameStateController.turnOrder == GameStateController.TurnOrder.Player)
         {
-            Vector3 mouse = Input.mousePosition;
-            Ray castPoint = _mainCam.ScreenPointToRay(mouse);
-            RaycastHit hit;
-
-            if (Physics.Raycast(castPoint, out hit, Mathf.Infinity, buildingTileMask))
+            _playerCardController.EnableCardPlacementButton(0, true);
+            _playerCardController.EnableCardPlacementButton(1, true);
+            _playerCardController.EnableCardPlacementButton(2, true);
+            if (_isHoldingCard)
             {
-                currentCreatedObject.CardObject.transform.position = hit.point;
-                BuildingGrid tile = hit.transform.GetComponent<BuildingGrid>();
-                if (_currentTile != null)
-                {
-                    _previousTitle = _currentTile;
-                    _previousTitle.DeSelected();
-                }
+                Vector3 mouse = Input.mousePosition;
+                Ray castPoint = _mainCam.ScreenPointToRay(mouse);
+                RaycastHit hit;
 
-                _currentTile = tile;
-                _currentTile.Selected();
-                if (Input.GetKeyUp(KeyCode.Mouse0))
+                if (Physics.Raycast(castPoint, out hit, Mathf.Infinity, buildingTileMask))
                 {
-                    CheckWhichCardisBeingPlaced(currentCreatedObject.CardType);
-                    //Put this in a method.
-                    currentCreatedObject.CardObject.transform.position = _currentTile.GetTileCenterPosition();
-                    _currentTile.PlaceCard();
-                    _currentTile = null;
-                    currentCreatedObject.CardObject = null;
-                    _isHoldingCard = false;
+                    currentCreatedObject.CardObject.transform.position = hit.point;
+                    BuildingGrid tile = hit.transform.GetComponent<BuildingGrid>();
+                    if (_currentTile != null)
+                    {
+                        _previousTitle = _currentTile;
+                        _previousTitle.DeSelected();
+                    }
+
+                    _currentTile = tile;
+                    _currentTile.Selected();
+                    if (Input.GetKeyUp(KeyCode.Mouse0))
+                    {
+                        CheckWhichCardisBeingPlaced(currentCreatedObject.CardType);
+                        //Put this in a method.
+                        currentCreatedObject.CardObject.transform.position = _currentTile.GetTileCenterPosition();
+                        _currentTile.PlaceCard();
+                        _currentTile = null;
+                        currentCreatedObject.CardObject = null;
+                        _isHoldingCard = false;
+                        _gameStateController.SwapTurnOrder();
+                    }
                 }
             }
+        }
+        else if (_gameStateController.turnOrder == GameStateController.TurnOrder.Enemy)
+        {
+            _playerCardController.EnableCardPlacementButton(0, false);
+            _playerCardController.EnableCardPlacementButton(1, false);
+            _playerCardController.EnableCardPlacementButton(2, false);
+            if (EnemyCardRecord.CurrentFlagNumber < FlagMaximumNumber)
+            {
+                HandleEnemyFlagLogic();
+            }
+            else
+            {
+                HandleDefStyleAILogic();
+            }
+        }
+    }
+
+    private void HandleEnemyFlagLogic()
+    {
+        switch (EnemyCardRecord.CurrentFlagNumber)
+        {
+            case 0:
+                if (currentEnemyCreatedObject.CardObject == null)
+                {
+                    currentEnemyCreatedObject.CardObject = Instantiate(_cardObjectSO.GetCardObjectByType(EnumDefs.Card.Flag));
+                }
+                SetCardInGridPosition(15);
+                EnemyCardRecord.CurrentFlagNumber++;
+                _availableEnemyBuildingGrid[15].enabled = false;
+                break;
+            case 1:
+                if (currentEnemyCreatedObject.CardObject == null)
+                {
+                    currentEnemyCreatedObject.CardObject = Instantiate(_cardObjectSO.GetCardObjectByType(EnumDefs.Card.Flag));
+                }
+                SetCardInGridPosition(20);
+                EnemyCardRecord.CurrentFlagNumber++;
+                _availableEnemyBuildingGrid[15].enabled = false;
+                break;
+            case 2:
+                if (currentEnemyCreatedObject.CardObject == null)
+                {
+                    currentEnemyCreatedObject.CardObject = Instantiate(_cardObjectSO.GetCardObjectByType(EnumDefs.Card.Flag));
+                }
+                SetCardInGridPosition(25);
+                EnemyCardRecord.CurrentFlagNumber++;
+                _availableEnemyBuildingGrid[15].enabled = false;
+                break;
+        }
+
+
+        currentEnemyCreatedObject.CardObject = null;
+        _gameStateController.SwapTurnOrder();
+    }
+
+    private void HandleDefStyleAILogic()
+    {
+        int randomDecsion = Random.Range(0, 100);
+        if (randomDecsion >= 30)
+        {
+            if (EnemyCardRecord.CurrentShieldNumber < ShieldMaximumNumber)
+            {
+                PlaceEnemyShield();
+                _gameStateController.SwapTurnOrder();
+            }
+            else
+            {
+                //Do other Logic
+            }
+        }
+        else if (randomDecsion < 30)
+        {
+            if (EnemyCardRecord.CurrentCannonNumber < CannonMaximumNumber)
+            {
+                if (currentEnemyCreatedObject.CardObject == null)
+                {
+                    currentEnemyCreatedObject.CardObject = Instantiate(_cardObjectSO.GetCardObjectByType(EnumDefs.Card.Cannon));
+                }
+                int randomPosition = Random.Range(0, _availableEnemyBuildingGrid.Count);
+                if (!_availableEnemyBuildingGrid[randomPosition].enabled)
+                {
+                    return;
+                }
+                else
+                {
+                    SetCardInGridPosition(randomPosition);
+                    _availableEnemyBuildingGrid[randomPosition].enabled = false;
+                    EnemyCardRecord.CurrentCannonNumber++;
+                    _gameStateController.SwapTurnOrder();
+                }
+            }
+            else
+            {
+                //Do other Logic
+            }
+        }
+
+        currentEnemyCreatedObject.CardObject = null;
+    }
+
+    private void SetCardInGridPosition(int positionIndex)
+    {
+        if (currentEnemyCreatedObject.CardObject != null)
+        {
+            _currentEnemyTile = _enemyBuildingGrid[positionIndex];
+            currentEnemyCreatedObject.CardObject.transform.position = _currentEnemyTile.GetTileCenterPosition();
         }
     }
 
@@ -143,5 +271,22 @@ public class CardPlacementController : MonoBehaviour
     private void OnDisable()
     {
         _playerCardController.UnSubscribeAllButtonEvents();
+    }
+
+    public void PlaceShield()
+    {
+        SpriteRenderer currentShield = _shieldSpriteRenderers[PlayerCardRecord.CurrentShieldNumber];
+        currentShield.enabled = true;
+        currentShield.color = _solidColor;
+        CheckWhichCardisBeingPlaced(EnumDefs.Card.Shield);
+        _gameStateController.SwapTurnOrder();
+    }
+
+    public void PlaceEnemyShield()
+    {
+        SpriteRenderer currentShield = _enemyShieldSpriteRenderers[EnemyCardRecord.CurrentShieldNumber];
+        currentShield.enabled = true;
+        currentShield.color = _solidColor;
+        EnemyCardRecord.CurrentShieldNumber++;
     }
 }
