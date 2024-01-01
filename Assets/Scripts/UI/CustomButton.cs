@@ -18,10 +18,7 @@ public class CustomButton : MonoBehaviour
     {
         _eventTrigger = GetComponent<EventTrigger>();
         _eventTrigger.triggers.Clear();
-    }
 
-    private void Start()
-    {
         OnEnterEvent = new EventTrigger.Entry
         {
             eventID = EventTriggerType.PointerEnter

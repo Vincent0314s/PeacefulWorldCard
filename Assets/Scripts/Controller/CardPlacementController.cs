@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Core.Card;
 
-public class CardPlacementController : MonoBehaviour
+public class CardPlacementController : MonoBehaviour, IInitialization
 {
     [System.Serializable]
     public struct CardRecordOnBoard
@@ -56,12 +56,12 @@ public class CardPlacementController : MonoBehaviour
 
     private bool _isHoldingCard;
 
-    private void Awake()
+    public void IAwake()
     {
         _mainCam = Camera.main;
     }
 
-    private void Start()
+    public void IStart()
     {
         //Get Buttom from Name or Enum instead of number.
         _playerCardController.SubscribeButtonDownEvent(0, () => CreateCardObject(EnumDefs.Card.Flag));
@@ -70,7 +70,7 @@ public class CardPlacementController : MonoBehaviour
 
         _availableEnemyBuildingGrid = new List<BuildingGrid>(_enemyBuildingGrid);
     }
-
+ 
     public void CreateCardObject(EnumDefs.Card cardType)
     {
         if (currentCreatedObject.CardObject == null)

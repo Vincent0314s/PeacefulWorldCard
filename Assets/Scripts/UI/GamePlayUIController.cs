@@ -4,19 +4,29 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class GamePlayUIController : MonoBehaviour
+public class GamePlayUIController : MonoBehaviour, IInitialization
 {
     [SerializeField] private GameObject _playerPSRObject;
     [SerializeField] private GameObject _enemyPSRObject;
-    public Image PlayerPSRImage { get; private set; }
+    //Paper = 0, Scissor = 1, Rock = 2
+    public CustomButton[] PaperScissorRockButtons;
+
     public Image EnemyPSRImage { get; private set; }
 
     [SerializeField] private TextMeshProUGUI _turnOrderText;
 
-    private void Awake()
+    public void IAwake()
     {
-        PlayerPSRImage = _playerPSRObject.transform.GetChild(1).GetComponent<Image>();
         EnemyPSRImage = _enemyPSRObject.transform.GetChild(1).GetComponent<Image>();
+    }
+
+    public void IStart()
+    {
+    }
+
+    public void SetEnemyPaperScissorsRockSprite(Sprite newSprite)
+    {
+        EnemyPSRImage.sprite = newSprite;
     }
 
     public void SetPaperScissorRockActive(bool isEnabled)
@@ -29,5 +39,6 @@ public class GamePlayUIController : MonoBehaviour
     {
         _turnOrderText.text = newText;
     }
+
 
 }

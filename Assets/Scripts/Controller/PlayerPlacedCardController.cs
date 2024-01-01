@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerPlacedCardController : MonoBehaviour
+public class PlayerPlacedCardController : MonoBehaviour,IInitialization
 {
     private Camera _mainCam;
     public LayerMask CannonMask;
@@ -12,9 +12,14 @@ public class PlayerPlacedCardController : MonoBehaviour
 
     private bool _isHoldingCannon;
 
-    private void Awake()
+    public void IAwake()
     {
         _mainCam = Camera.main;
+
+    }
+
+    public void IStart()
+    {
     }
 
     private void Update()
@@ -49,4 +54,5 @@ public class PlayerPlacedCardController : MonoBehaviour
             }
         }
     }
+
 }

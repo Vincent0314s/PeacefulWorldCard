@@ -4,14 +4,21 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class GameBoardStateController : MonoBehaviour
+public enum PaperRockScissors
+{
+    Paper,
+    Rock,
+    Scissors
+}
+
+public class GameBoardStateController : MonoBehaviour, IInitialization
 {
     public enum GmaeState
     {
         None,
-        PaperRockScissors,
-        Start,
-        End
+        PaperRockScissorsStart,
+        GameStart,
+        GameEnd
     }
 
     public enum TurnOrder
@@ -21,102 +28,94 @@ public class GameBoardStateController : MonoBehaviour
         Enemy
     }
 
-    public enum PaperRockScissors
-    {
-        Paper,
-        Rock,
-        Scissors
-    }
-
     public GmaeState gmaeState;
     public TurnOrder turnOrder;
-    public PaperRockScissors PlayerPeperRockScissors;
-    public PaperRockScissors EnemyPeperRockScissors;
+    public PaperRockScissors PlayerPaperRockScissors;
+    public PaperRockScissors EnemyPaperRockScissors;
 
+    [Space(), Header("Reference")]
     [SerializeField] private GamePlayUIController _gamePlayUIController;
+    [SerializeField] private PaperScissorRockSequenceController _paperScissorRockSequenceController;
     [SerializeField] private SpriteListSO _paperScissorRockSpriteList;
 
-    private Sprite playerSprite;
-    private Sprite enemySprite;
+    public void IAwake()
+    {
+    }
 
-    private void Start()
+    public void IStart()
     {
         gmaeState = GmaeState.None;
         turnOrder = TurnOrder.None;
 
-        playerSprite = _gamePlayUIController.PlayerPSRImage.sprite;
-        enemySprite = _gamePlayUIController.EnemyPSRImage.sprite;
+        _gamePlayUIController.PaperScissorRockButtons[0].AddButtonClickEvent(() => PlayerDonePaperScissorRockSelection(PaperRockScissors.Paper));
+        _gamePlayUIController.PaperScissorRockButtons[1].AddButtonClickEvent(() => PlayerDonePaperScissorRockSelection(PaperRockScissors.Scissors));
+        _gamePlayUIController.PaperScissorRockButtons[2].AddButtonClickEvent(() => PlayerDonePaperScissorRockSelection(PaperRockScissors.Rock));
+        _gamePlayUIController.SetPaperScissorRockActive(false);
     }
 
-    public void GameStart()
+    public void StartPaperScissorRock()
     {
-        gmaeState = GmaeState.PaperRockScissors;
-        PaperRockScissorsSequence();
-    }
-
-    private void PaperRockScissorsSequence()
-    {
-        StartCoroutine(PaperRockScissorsCoroutine());
-    }
-
-    private IEnumerator PaperRockScissorsCoroutine()
-    {
+        gmaeState = GmaeState.PaperRockScissorsStart;
         _gamePlayUIController.SetPaperScissorRockActive(true);
+        ResetPaperScissorsRock();
+    }
+    private void PlayerDonePaperScissorRockSelection(PaperRockScissors paperRockScissors)
+    {
+        PlayerPaperRockScissors = paperRockScissors;
 
-        yield return new WaitForSeconds(0.25f);
-        AssignPaperScissorRockSprite();
-        yield return new WaitForSeconds(0.25f);
-        AssignPaperScissorRockSprite();
-        yield return new WaitForSeconds(0.25f);
-        AssignPaperScissorRockSprite();
-        yield return new WaitForSeconds(0.25f);
-        AssignPaperScissorRockSprite();
+        StartCoroutine(PaperRockScissorsSequenceCoroutine());
+    }
+
+    private IEnumerator PaperRockScissorsSequenceCoroutine()
+    {
+        switch (PlayerPaperRockScissors)
+        {
+            case PaperRockScissors.Paper:
+                _paperScissorRockSequenceController.PaperSelection();
+                break;
+            case PaperRockScissors.Scissors:
+                _paperScissorRockSequenceController.ScissorsSelection();
+                break;
+            case PaperRockScissors.Rock:
+                _paperScissorRockSequenceController.RockSelection();
+                break;
+        }
         yield return new WaitForSeconds(1f);
-
+        _gamePlayUIController.SetEnemyPaperScissorsRockSprite(_paperScissorRockSpriteList.GetRandomSpriteFromList()); 
+        yield return new WaitForSeconds(1f);
         CheckWhoWinsPeperRockScissors();
     }
 
-    private void AssignPaperScissorRockSprite()
+    private void ResetPaperScissorsRock()
     {
-        playerSprite = _paperScissorRockSpriteList.GetRandomSpriteFromList();
-        enemySprite = _paperScissorRockSpriteList.GetRandomSpriteFromList();
+        _gamePlayUIController.SetEnemyPaperScissorsRockSprite(null);
+        _paperScissorRockSequenceController.ResetSequence();
     }
 
     private void CheckWhoWinsPeperRockScissors()
     {
-        if (playerSprite.name.Contains("Paper"))
-        {
-            PlayerPeperRockScissors = PaperRockScissors.Paper;
-        }
-        else if (playerSprite.name.Contains("Rock"))
-        {
-            PlayerPeperRockScissors = PaperRockScissors.Rock;
-        }
-        else if (playerSprite.name.Contains("Scissors"))
-        {
-            PlayerPeperRockScissors = PaperRockScissors.Scissors;
-        }
+        Sprite enemySprite = _gamePlayUIController.EnemyPSRImage.sprite;
 
         if (enemySprite.name.Contains("Paper"))
         {
-            EnemyPeperRockScissors = PaperRockScissors.Paper;
+            EnemyPaperRockScissors = PaperRockScissors.Paper;
         }
         else if (enemySprite.name.Contains("Rock"))
         {
-            EnemyPeperRockScissors = PaperRockScissors.Rock;
+            EnemyPaperRockScissors = PaperRockScissors.Rock;
         }
         else if (enemySprite.name.Contains("Scissors"))
         {
-            EnemyPeperRockScissors = PaperRockScissors.Scissors;
+            EnemyPaperRockScissors = PaperRockScissors.Scissors;
         }
 
-        switch (PlayerPeperRockScissors)
+        switch (PlayerPaperRockScissors)
         {
             case PaperRockScissors.Paper:
-                switch (EnemyPeperRockScissors)
+                switch (EnemyPaperRockScissors)
                 {
                     case PaperRockScissors.Paper:
-                        PaperRockScissorsSequence();
+                        ResetPaperScissorsRock();
                         break;
                     case PaperRockScissors.Rock:
                         turnOrder = TurnOrder.Player;
@@ -127,13 +126,13 @@ public class GameBoardStateController : MonoBehaviour
                 }
                 break;
             case PaperRockScissors.Rock:
-                switch (EnemyPeperRockScissors)
+                switch (EnemyPaperRockScissors)
                 {
                     case PaperRockScissors.Paper:
                         turnOrder = TurnOrder.Enemy;
                         break;
                     case PaperRockScissors.Rock:
-                        PaperRockScissorsSequence();
+                        ResetPaperScissorsRock();
                         break;
                     case PaperRockScissors.Scissors:
                         turnOrder = TurnOrder.Player;
@@ -141,7 +140,7 @@ public class GameBoardStateController : MonoBehaviour
                 }
                 break;
             case PaperRockScissors.Scissors:
-                switch (EnemyPeperRockScissors)
+                switch (EnemyPaperRockScissors)
                 {
                     case PaperRockScissors.Paper:
                         turnOrder = TurnOrder.Player;
@@ -150,7 +149,7 @@ public class GameBoardStateController : MonoBehaviour
                         turnOrder = TurnOrder.Enemy;
                         break;
                     case PaperRockScissors.Scissors:
-                        PaperRockScissorsSequence();
+                        ResetPaperScissorsRock();
                         break;
                 }
                 break;
@@ -160,7 +159,7 @@ public class GameBoardStateController : MonoBehaviour
         {
             _gamePlayUIController.SetTurnOrderText(turnOrder.ToString());
             _gamePlayUIController.SetPaperScissorRockActive(false);
-            gmaeState = GmaeState.Start;
+            gmaeState = GmaeState.GameStart;
         }
     }
 
@@ -175,5 +174,13 @@ public class GameBoardStateController : MonoBehaviour
             turnOrder = TurnOrder.Player;
         }
         _gamePlayUIController.SetTurnOrderText(turnOrder.ToString());
+    }
+
+    private void OnDisable()
+    {
+        for (int i = 0; i < _gamePlayUIController.PaperScissorRockButtons.Length; i++)
+        {
+            _gamePlayUIController.PaperScissorRockButtons[i].ClearButtonEvent();
+        }
     }
 }
