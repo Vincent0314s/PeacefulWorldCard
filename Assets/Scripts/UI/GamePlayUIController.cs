@@ -15,8 +15,8 @@ public class GamePlayUIController : MonoBehaviour
 
     private void Awake()
     {
-        PlayerPSRImage = _playerPSRObject.transform.GetChild(0).GetComponent<Image>();
-        EnemyPSRImage = _enemyPSRObject.transform.GetChild(0).GetComponent<Image>();
+        PlayerPSRImage = _playerPSRObject.transform.GetChild(1).GetComponent<Image>();
+        EnemyPSRImage = _enemyPSRObject.transform.GetChild(1).GetComponent<Image>();
     }
 
     public void SetPaperScissorRockActive(bool isEnabled)
