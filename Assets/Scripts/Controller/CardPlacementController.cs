@@ -47,7 +47,7 @@ public class CardPlacementController : MonoBehaviour
     [SerializeField] private Color _ghostColor;
     [SerializeField] private Color _solidColor;
 
-    [SerializeField] private GameStateController _gameStateController;
+    [SerializeField] private GameBoardStateController _gameStateController;
     [SerializeField] private BuildingGrid[] _enemyBuildingGrid;
     private List<BuildingGrid> _availableEnemyBuildingGrid;
 
@@ -83,7 +83,7 @@ public class CardPlacementController : MonoBehaviour
 
     private void Update()
     {
-        if (_gameStateController.turnOrder == GameStateController.TurnOrder.Player)
+        if (_gameStateController.turnOrder == GameBoardStateController.TurnOrder.Player)
         {
             _playerCardController.EnableCardPlacementButton(0, true);
             _playerCardController.EnableCardPlacementButton(1, true);
@@ -120,7 +120,7 @@ public class CardPlacementController : MonoBehaviour
                 }
             }
         }
-        else if (_gameStateController.turnOrder == GameStateController.TurnOrder.Enemy)
+        else if (_gameStateController.turnOrder == GameBoardStateController.TurnOrder.Enemy)
         {
             _playerCardController.EnableCardPlacementButton(0, false);
             _playerCardController.EnableCardPlacementButton(1, false);

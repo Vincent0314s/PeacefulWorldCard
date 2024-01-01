@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class CardBoardController : MonoBehaviour
+public class PlayerPlacedCardController : MonoBehaviour
 {
     private Camera _mainCam;
     public LayerMask CannonMask;

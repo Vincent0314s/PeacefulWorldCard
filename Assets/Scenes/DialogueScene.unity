@@ -195,7 +195,7 @@ MonoBehaviour:
   DialogueContext: {fileID: 1436443403}
   BGImage: {fileID: 206224847}
   CharacterImage: {fileID: 497699235}
-  _backgroundSO: {fileID: 11400000, guid: 3668b480f57f26e4f9658e40a894df9e, type: 2}
+  _backgroundSO: {fileID: 11400000, guid: 80ec0cb76441912419d2e41064270d5d, type: 2}
   _characterSO: {fileID: 11400000, guid: d31a7e16a6d04eb41a17c707f8b4578f, type: 2}
   AllDialogues: []
   CurrentDialogueList: []

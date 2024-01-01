@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d2f765b1593211547b85eecd57bb49e7, type: 3}
+  m_Name: PaperScissorRockSpriteList
+  m_EditorClassIdentifier: 
+  Sprites:
+  - {fileID: 21300000, guid: e72f4eb8870db6146b6c948e48b10af7, type: 3}
+  - {fileID: 21300000, guid: 0784e1357f5235841a9b469f2a6e21b6, type: 3}
+  - {fileID: 21300000, guid: 3bb1d6a3eb7b31046b6519df304824d3, type: 3}
+  folderPath: Sprites/PSR

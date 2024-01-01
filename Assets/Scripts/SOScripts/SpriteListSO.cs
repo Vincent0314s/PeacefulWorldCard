@@ -13,10 +13,17 @@ public class SpriteListSO : ScriptableObject
     {
         for (int i = 0; i < Sprites.Length; i++)
         {
-            if (Sprites[i].name.Equals(name)) { 
+            if (Sprites[i].name.Equals(name))
+            {
                 return Sprites[i];
             }
         }
         return null;
+    }
+
+    public Sprite GetRandomSpriteFromList()
+    {
+        Sprite sprite = Sprites[Random.Range(0, Sprites.Length)];
+        return sprite;
     }
 }

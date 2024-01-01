@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-public class GameStateController : MonoBehaviour
+public class GameBoardStateController : MonoBehaviour
 {
     public enum GmaeState
     {
@@ -33,18 +33,19 @@ public class GameStateController : MonoBehaviour
     public PaperRockScissors PlayerPeperRockScissors;
     public PaperRockScissors EnemyPeperRockScissors;
 
-    [SerializeField] private Sprite[] _psr;
-    [SerializeField] private GameObject _playerPSRObject;
-    [SerializeField] private GameObject _enemyPSRObject;
-    [SerializeField] private Image _playerPSR;
-    [SerializeField] private Image _enemyPSR;
+    [SerializeField] private GamePlayUIController _gamePlayUIController;
+    [SerializeField] private SpriteListSO _paperScissorRockSpriteList;
 
-    [SerializeField] private TextMeshProUGUI _turnOrderText;
+    private Sprite playerSprite;
+    private Sprite enemySprite;
 
     private void Start()
     {
         gmaeState = GmaeState.None;
         turnOrder = TurnOrder.None;
+
+        playerSprite = _gamePlayUIController.PlayerPSRImage.sprite;
+        enemySprite = _gamePlayUIController.EnemyPSRImage.sprite;
     }
 
     public void GameStart()
@@ -60,33 +61,29 @@ public class GameStateController : MonoBehaviour
 
     private IEnumerator PaperRockScissorsCoroutine()
     {
-        _playerPSRObject.SetActive(true);
-        _enemyPSRObject.SetActive(true);
+        _gamePlayUIController.SetPaperScissorRockActive(true);
 
-        _playerPSR.sprite = GetRandomPaperRockScissorsResult();
-        _enemyPSR.sprite = GetRandomPaperRockScissorsResult();
         yield return new WaitForSeconds(0.25f);
-        _playerPSR.sprite = GetRandomPaperRockScissorsResult();
-        _enemyPSR.sprite = GetRandomPaperRockScissorsResult();
+        AssignPaperScissorRockSprite();
         yield return new WaitForSeconds(0.25f);
-        _playerPSR.sprite = GetRandomPaperRockScissorsResult();
-        _enemyPSR.sprite = GetRandomPaperRockScissorsResult();
+        AssignPaperScissorRockSprite();
         yield return new WaitForSeconds(0.25f);
-        _playerPSR.sprite = GetRandomPaperRockScissorsResult();
-        _enemyPSR.sprite = GetRandomPaperRockScissorsResult();
+        AssignPaperScissorRockSprite();
         yield return new WaitForSeconds(0.25f);
-        _playerPSR.sprite = GetRandomPaperRockScissorsResult();
-        _enemyPSR.sprite = GetRandomPaperRockScissorsResult();
+        AssignPaperScissorRockSprite();
         yield return new WaitForSeconds(1f);
 
         CheckWhoWinsPeperRockScissors();
     }
 
+    private void AssignPaperScissorRockSprite()
+    {
+        playerSprite = _paperScissorRockSpriteList.GetRandomSpriteFromList();
+        enemySprite = _paperScissorRockSpriteList.GetRandomSpriteFromList();
+    }
+
     private void CheckWhoWinsPeperRockScissors()
     {
-        Sprite playerSprite = _playerPSR.sprite;
-        Sprite enemySprite = _enemyPSR.sprite;
-
         if (playerSprite.name.Contains("Paper"))
         {
             PlayerPeperRockScissors = PaperRockScissors.Paper;
@@ -161,9 +158,8 @@ public class GameStateController : MonoBehaviour
 
         if (turnOrder != TurnOrder.None)
         {
-            _turnOrderText.text = turnOrder.ToString();
-            _playerPSRObject.SetActive(false);
-            _enemyPSRObject.SetActive(false);
+            _gamePlayUIController.SetTurnOrderText(turnOrder.ToString());
+            _gamePlayUIController.SetPaperScissorRockActive(false);
             gmaeState = GmaeState.Start;
         }
     }
@@ -178,12 +174,6 @@ public class GameStateController : MonoBehaviour
         {
             turnOrder = TurnOrder.Player;
         }
-        _turnOrderText.text = turnOrder.ToString();
-    }
-
-    private Sprite GetRandomPaperRockScissorsResult()
-    {
-        Sprite sprite = _psr[Random.Range(0, _psr.Length)];
-        return sprite;
+        _gamePlayUIController.SetTurnOrderText(turnOrder.ToString());
     }
 }

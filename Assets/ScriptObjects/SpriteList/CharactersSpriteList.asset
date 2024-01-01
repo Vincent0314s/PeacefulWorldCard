@@ -10,8 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d2f765b1593211547b85eecd57bb49e7, type: 3}
-  m_Name: Background
+  m_Name: CharactersSpriteList
   m_EditorClassIdentifier: 
   Sprites:
-  - {fileID: 21300000, guid: b2d0bcdc1aa4f0c449b47c5481ef59d3, type: 3}
-  folderPath: Sprites/Background
+  - {fileID: 21300000, guid: ca734b4482236c7448ef16541b182f04, type: 3}
+  - {fileID: 21300000, guid: 9d82785efe1560049a9cf99390661c19, type: 3}
+  - {fileID: 21300000, guid: d9f16a8ccc362124c942da0d8c79b4ab, type: 3}
+  folderPath: Sprites/Character
