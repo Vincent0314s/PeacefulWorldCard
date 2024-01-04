@@ -4363,6 +4363,7 @@ MonoBehaviour:
   EnemyPaperRockScissors: 0
   _gamePlayUIController: {fileID: 1342379396}
   _paperScissorRockSequenceController: {fileID: 1731615849}
+  _cardPlacementController: {fileID: 0}
   _paperScissorRockSpriteList: {fileID: 11400000, guid: 4688bf20a2e9496459d776a18d7c901f,
     type: 2}
 --- !u!1 &478385589
@@ -5649,6 +5650,7 @@ GameObject:
   m_Component:
   - component: {fileID: 667527311}
   - component: {fileID: 667527312}
+  - component: {fileID: 667527313}
   m_Layer: 0
   m_Name: GameExecutionController
   m_TagString: Untagged
@@ -5687,6 +5689,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 78ee5f550c2abc14cb9f5ccd9b24f278, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &667527313
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 667527310}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 048475b0962b56d4890e95cf7b18a308, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &684956803
@@ -14634,7 +14648,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1691908936}
-  - component: {fileID: 1691908935}
   m_Layer: 0
   m_Name: CardPlacementController
   m_TagString: Untagged
@@ -14642,102 +14655,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1691908935
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1691908934}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd557b572f73d1b488e18b8acc32784c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _playerCardController: {fileID: 1342379395}
-  _cardObjectSO: {fileID: 11400000, guid: 00df3d8f2d36b5f4994e6f5d5707a9ad, type: 2}
-  buildingTileMask:
-    serializedVersion: 2
-    m_Bits: 64
-  PlayerCardRecord:
-    CurrentFlagNumber: 0
-    CurrentShieldNumber: 0
-    CurrentCannonNumber: 0
-  EnemyCardRecord:
-    CurrentFlagNumber: 0
-    CurrentShieldNumber: 0
-    CurrentCannonNumber: 0
-  _onFlagPlacedEvent: {fileID: 11400000, guid: bf6c25954cbe7bd428be231d60ca79fa, type: 2}
-  _onShieldPlacedEvent: {fileID: 11400000, guid: c01d0537e0a188c4cafaa2e32b8e7240,
-    type: 2}
-  _onCannonPlacedEvent: {fileID: 11400000, guid: af09117c6f1c1584390d652791f767c7,
-    type: 2}
-  _shieldSpriteRenderers:
-  - {fileID: 88567476}
-  - {fileID: 866713470}
-  - {fileID: 45834754}
-  - {fileID: 2108052288}
-  - {fileID: 1549311124}
-  _enemyShieldSpriteRenderers:
-  - {fileID: 1966601547}
-  - {fileID: 623788584}
-  - {fileID: 394623911}
-  - {fileID: 417598115}
-  - {fileID: 865888930}
-  _ghostColor: {r: 0.36536425, g: 1, b: 0.2588235, a: 0.5019608}
-  _solidColor: {r: 0.53333336, g: 0.85882354, b: 1, a: 1}
-  _gameStateController: {fileID: 456814177}
-  _enemyBuildingGrid:
-  - {fileID: 747334710}
-  - {fileID: 411622436}
-  - {fileID: 1978840701}
-  - {fileID: 1117262444}
-  - {fileID: 684956804}
-  - {fileID: 839639955}
-  - {fileID: 898652598}
-  - {fileID: 1366784713}
-  - {fileID: 1364812652}
-  - {fileID: 1809684518}
-  - {fileID: 1662050938}
-  - {fileID: 478385590}
-  - {fileID: 1472045182}
-  - {fileID: 1176099726}
-  - {fileID: 707442885}
-  - {fileID: 1549988582}
-  - {fileID: 105053926}
-  - {fileID: 2085753270}
-  - {fileID: 1363476291}
-  - {fileID: 46859839}
-  - {fileID: 976751185}
-  - {fileID: 331861905}
-  - {fileID: 1987360017}
-  - {fileID: 1477187834}
-  - {fileID: 2006698426}
-  - {fileID: 1866552061}
-  - {fileID: 995274905}
-  - {fileID: 964876101}
-  - {fileID: 278994042}
-  - {fileID: 1112720045}
-  - {fileID: 549737167}
-  - {fileID: 18154491}
-  - {fileID: 664709113}
-  - {fileID: 1140072459}
-  - {fileID: 1304267176}
-  - {fileID: 893550061}
-  - {fileID: 1472624926}
-  - {fileID: 1253613550}
-  - {fileID: 36652311}
-  - {fileID: 1843519714}
-  - {fileID: 734446780}
-  - {fileID: 1521634732}
-  - {fileID: 334469571}
-  - {fileID: 1961246963}
-  - {fileID: 704323538}
-  - {fileID: 1577247431}
-  - {fileID: 1399226630}
-  - {fileID: 1485879831}
-  - {fileID: 185565232}
-  - {fileID: 1856796848}
 --- !u!4 &1691908936
 Transform:
   m_ObjectHideFlags: 0

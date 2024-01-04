@@ -11,7 +11,7 @@ public enum PaperRockScissors
     Scissors
 }
 
-public class GameBoardStateController : MonoBehaviour, IInitialization
+public class GameBoardStateController : MonoBehaviour, IInitialization, IUpdateLoop
 {
     public enum GmaeState
     {
@@ -36,6 +36,7 @@ public class GameBoardStateController : MonoBehaviour, IInitialization
     [Space(), Header("Reference")]
     [SerializeField] private GamePlayUIController _gamePlayUIController;
     [SerializeField] private PaperScissorRockSequenceController _paperScissorRockSequenceController;
+    [SerializeField] private BasicCardPlacementController _cardPlacementController;
     [SerializeField] private SpriteListSO _paperScissorRockSpriteList;
 
     public void IAwake()
@@ -51,6 +52,14 @@ public class GameBoardStateController : MonoBehaviour, IInitialization
         _gamePlayUIController.PaperScissorRockButtons[1].AddButtonClickEvent(() => PlayerDonePaperScissorRockSelection(PaperRockScissors.Scissors));
         _gamePlayUIController.PaperScissorRockButtons[2].AddButtonClickEvent(() => PlayerDonePaperScissorRockSelection(PaperRockScissors.Rock));
         _gamePlayUIController.SetPaperScissorRockActive(false);
+    }
+
+    public void IUpdate()
+    {
+    }
+
+    public void IFixedUpdate()
+    {
     }
 
     public void StartPaperScissorRock()
@@ -183,4 +192,6 @@ public class GameBoardStateController : MonoBehaviour, IInitialization
             _gamePlayUIController.PaperScissorRockButtons[i].ClearButtonEvent();
         }
     }
+
+  
 }
