@@ -23,6 +23,7 @@ public class DialogueController : MonoBehaviour
     {
         ReadDialogueFromTextFile(0);
         ReadDialogueByIndex();
+        DontDestroyOnLoad(transform.gameObject);
     }
 
     private void Update()
@@ -99,7 +100,15 @@ public class DialogueController : MonoBehaviour
             if (line.Contains("[BACKGROUND"))
             {
                 string backgroundName = line.Substring(line.IndexOf('=') + 1, line.IndexOf(']') - (line.IndexOf('=') + 1));
-                BGImage.sprite = _backgroundSO.GetSpriteByName(backgroundName);
+                if (backgroundName.Equals("null"))
+                {
+                    BGImage.enabled = false;
+                }
+                else
+                {
+                    BGImage.enabled = true;
+                    BGImage.sprite = _backgroundSO.GetSpriteByName(backgroundName);
+                }
             }
             else if (line.Contains("[NAME"))
             {
@@ -110,6 +119,10 @@ public class DialogueController : MonoBehaviour
             {
                 string charName = line.Substring(line.IndexOf('=') + 1, line.IndexOf(']') - (line.IndexOf('=') + 1));
                 CharacterImage.sprite = _characterSO.GetSpriteByName(charName);
+            }
+            else if (line.Contains("[BattleStart"))
+            {
+                SceneController.LoadScene(1);
             }
             else
             {

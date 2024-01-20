@@ -45,11 +45,13 @@ public class PlayerPlacedCardController : MonoBehaviour, IInitialization
                 _currentCannonCard.SetAttackPoint(destination);
                 if (Input.GetKeyUp(KeyCode.Mouse0))
                 {
-                    hit.transform.TryGetComponent(out IDestroyable destroyableObject);
-                    destroyableObject.DestroyObject();
-                    _currentCannonCard.EnableTrajectoryLine(false);
-                    _isHoldingCannon = false;
-                    OnSelectingFinshed?.Invoke();
+                    if (hit.transform.TryGetComponent(out IDestroyable destroyableObject))
+                    {
+                        destroyableObject.DestroyObject();
+                        _currentCannonCard.EnableTrajectoryLine(false);
+                        _isHoldingCannon = false;
+                        OnSelectingFinshed?.Invoke();
+                    }
                 }
             }
         }
