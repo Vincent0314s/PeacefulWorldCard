@@ -250,8 +250,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3246796102596235296}
-  - component: {fileID: 7160981425384016719}
   - component: {fileID: 4917984302697863267}
+  - component: {fileID: 7160981425384016719}
   m_Layer: 7
   m_Name: PF_Cannon
   m_TagString: Untagged
@@ -276,19 +276,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7160981425384016719
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3246796102596235297}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2fa5b1379df134e418571346daf06680, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _trajectoryLine: {fileID: 1333845232849520721}
 --- !u!65 &4917984302697863267
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -302,3 +289,17 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 0.7, y: 0.1, z: 0.7}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &7160981425384016719
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3246796102596235297}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2fa5b1379df134e418571346daf06680, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CardPlacementController: {fileID: 0}
+  _trajectoryLine: {fileID: 1333845232849520721}

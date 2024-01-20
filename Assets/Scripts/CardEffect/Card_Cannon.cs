@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Card_Cannon : MonoBehaviour
+public class Card_Cannon : CardBase, IDestroyable
 {
     [SerializeField] private TrajectoryLine _trajectoryLine;
 
@@ -28,4 +28,9 @@ public class Card_Cannon : MonoBehaviour
         }
     }
 
+    public void DestroyObject()
+    {
+        CardPlacementController.DestroyCard(EnumDefs.Card.Cannon);
+        Destroy(transform.gameObject);
+    }
 }

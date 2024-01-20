@@ -16,9 +16,6 @@ MonoBehaviour:
   - CardType: 0
     CardObject: {fileID: 3337642526507394434, guid: 91cfeb799409b9f4b95b5af755f85529,
       type: 3}
-  - CardType: 1
-    CardObject: {fileID: 6163238423160401347, guid: b847494f93761c744854e5aca56dbbd4,
-      type: 3}
   - CardType: 2
     CardObject: {fileID: 3246796102596235297, guid: 760ef9b9677811049bd2c10dae88a5da,
       type: 3}

@@ -8,6 +8,7 @@ public class PlayerCardPlacementController : BasicCardPlacementController, IInit
 {
     [Header("Placement")]
     [SerializeField] private PlayerCardController _playerCardController;
+    [SerializeField] private PlayerPlacedCardController _playerPlacedCardController;
     public LayerMask buildingTileMask;
     private Camera _mainCam;
     private BuildingGrid _previousTitle;
@@ -15,7 +16,6 @@ public class PlayerCardPlacementController : BasicCardPlacementController, IInit
     [SerializeField] private GameEventSO _onFlagPlacedEvent;
     [SerializeField] private GameEventSO _onShieldPlacedEvent;
     [SerializeField] private GameEventSO _onCannonPlacedEvent;
-    [SerializeField] private SpriteRenderer[] _shieldSpriteRenderers;
     [SerializeField] private Color _ghostColor;
     private bool _isHoldingCard;
 
@@ -34,7 +34,7 @@ public class PlayerCardPlacementController : BasicCardPlacementController, IInit
     {
         //Get Buttom from Name or Enum instead of number.
         _playerCardController.SubscribeButtonDownEvent(0, () => PlaceFlag());
-        _playerCardController.SubscribeButtonDownEvent(1, () => PlaceShield(_shieldSpriteRenderers[CardRecord.CurrentShieldNumber]));
+        _playerCardController.SubscribeButtonDownEvent(1, () => PlaceShield(_shieldController.ShieldSpriteRenders[CardRecord.CurrentShieldNumber]));
         _playerCardController.SubscribeButtonDownEvent(2, () => PlaceCannon());
 
         //Eveey battle start
@@ -53,7 +53,7 @@ public class PlayerCardPlacementController : BasicCardPlacementController, IInit
         _isHoldingCard = true;
     }
 
-    protected override void PlaceShield(SpriteRenderer currentShield)
+    protected override void PlaceShield(Card_Shield currentShield)
     {
         base.PlaceShield(currentShield);
         _hasPlacedShield = true;
@@ -69,6 +69,7 @@ public class PlayerCardPlacementController : BasicCardPlacementController, IInit
                 break;
             case PlacingCardState.Placing:
                 PlaceingCardState(() => SwitchCardState(PlacingCardState.End));
+                _playerPlacedCardController.CardSelectingLogic(() => SwitchCardState(PlacingCardState.End));
                 break;
             case PlacingCardState.End:
                 EnableAllCardPlacementButton(false);

@@ -7,7 +7,6 @@ using System;
 public class AICardPlacementController : BasicCardPlacementController, IInitialization
 {
     [Header("Shield")]
-    [SerializeField] private SpriteRenderer[] _enemyShieldSpriteRenderers;
     [SerializeField] private BuildingGrid[] _enemyBuildingGrid;
     private List<BuildingGrid> _availableEnemyBuildingGrid;
 
@@ -96,7 +95,7 @@ public class AICardPlacementController : BasicCardPlacementController, IInitiali
         {
             if (CardRecord.CurrentShieldNumber < _basicGameRuleSO.ShieldMaximumNumber)
             {
-                PlaceShield(_enemyShieldSpriteRenderers[CardRecord.CurrentShieldNumber]);
+                PlaceShield(_shieldController.ShieldSpriteRenders[CardRecord.CurrentShieldNumber]);
                 CardRecord.CurrentShieldNumber++;
             }
             else

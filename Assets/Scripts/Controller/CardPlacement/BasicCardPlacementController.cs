@@ -19,8 +19,9 @@ public class BasicCardPlacementController : MonoBehaviour
         End
     }
 
-    //Common
     [SerializeField] protected CardObjectOnBoardSO CardObjectSO;
+    [SerializeField] protected ShieldController _shieldController;
+
     protected BuildingGrid CurrentTile;
     protected CardPlacementObject CurrentCreatedObject;
 
@@ -31,10 +32,11 @@ public class BasicCardPlacementController : MonoBehaviour
 
     [SerializeField] protected PlacingCardState CurrentCardState;
 
-    protected virtual void PlaceShield(SpriteRenderer currentShield)
+    protected virtual void PlaceShield(Card_Shield currentShield)
     {
-        currentShield.enabled = true;
-        currentShield.color = _solidColor;
+        currentShield.ShieldEnable(true);
+        currentShield.SetColor(_solidColor);
+        currentShield.SetCardOwner(this);
     }
 
     protected virtual void PlaceFlag()
@@ -44,6 +46,7 @@ public class BasicCardPlacementController : MonoBehaviour
             return;
         }
         CurrentCreatedObject.CardObject = Instantiate(CardObjectSO.GetCardObjectByType(EnumDefs.Card.Flag));
+        CurrentCreatedObject.CardObject.GetComponent<CardBase>().SetCardOwner(this);
         CurrentCreatedObject.CardType = EnumDefs.Card.Flag;
     }
 
@@ -55,7 +58,23 @@ public class BasicCardPlacementController : MonoBehaviour
         }
 
         CurrentCreatedObject.CardObject = Instantiate(CardObjectSO.GetCardObjectByType(EnumDefs.Card.Cannon));
+        CurrentCreatedObject.CardObject.GetComponent<CardBase>().SetCardOwner(this);
         CurrentCreatedObject.CardType = EnumDefs.Card.Cannon;
+    }
+
+    public void DestroyCard(EnumDefs.Card cardType)
+    {
+        switch (cardType) {
+            case EnumDefs.Card.Flag:
+                CardRecord.CurrentFlagNumber--;
+                break;
+            case EnumDefs.Card.Cannon:
+                CardRecord.CurrentCannonNumber--;
+                break;
+            case EnumDefs.Card.Shield:
+                CardRecord.CurrentShieldNumber--;
+                break;
+        }
     }
 
     public virtual void PlacingCardLogic(Action OnTurnFinished)

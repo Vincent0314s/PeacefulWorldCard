@@ -1,12 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using System;
 
-public class PlayerPlacedCardController : MonoBehaviour,IInitialization
+public class PlayerPlacedCardController : MonoBehaviour, IInitialization
 {
     private Camera _mainCam;
     public LayerMask CannonMask;
-    public LayerMask EnemyMask;
 
     private Card_Cannon _currentCannonCard;
 
@@ -22,7 +20,7 @@ public class PlayerPlacedCardController : MonoBehaviour,IInitialization
     {
     }
 
-    private void Update()
+    public void CardSelectingLogic(Action OnSelectingFinshed)
     {
         Vector3 mouse = Input.mousePosition;
         Ray castPoint = _mainCam.ScreenPointToRay(mouse);
@@ -47,9 +45,11 @@ public class PlayerPlacedCardController : MonoBehaviour,IInitialization
                 _currentCannonCard.SetAttackPoint(destination);
                 if (Input.GetKeyUp(KeyCode.Mouse0))
                 {
-                    Debug.Log(hit.transform.name);
+                    hit.transform.TryGetComponent(out IDestroyable destroyableObject);
+                    destroyableObject.DestroyObject();
                     _currentCannonCard.EnableTrajectoryLine(false);
                     _isHoldingCannon = false;
+                    OnSelectingFinshed?.Invoke();
                 }
             }
         }
