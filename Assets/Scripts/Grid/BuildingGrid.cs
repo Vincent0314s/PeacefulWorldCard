@@ -30,7 +30,7 @@ namespace Core.Card
             _materialSwap.SwapMaterial(_meshRen, StringDefs.MaterialSwap.Normal);
         }
 
-        public void PlaceCard()
+        public void HasCard()
         {
             hasCardObject = true;
             _materialSwap.SwapMaterial(_meshRen, StringDefs.MaterialSwap.Occupied);

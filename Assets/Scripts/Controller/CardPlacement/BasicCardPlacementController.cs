@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using Core.Card;
+using System;
 
 public class BasicCardPlacementController : MonoBehaviour
 {
@@ -13,28 +12,62 @@ public class BasicCardPlacementController : MonoBehaviour
         public int CurrentCannonNumber;
     }
 
-    //Common
-    [SerializeField] protected CardObjectOnBoardSO _cardObjectSO;
-    protected BuildingGrid _currentTile;
-    [SerializeField] protected GameBoardRuleSO _basicGameRuleSO;
-    [Header("Card On Boards")]
-    [SerializeField] protected CardRecordOnBoard PlayerCardRecord;
-    [SerializeField] protected CardRecordOnBoard EnemyCardRecord;
-    [SerializeField] protected Color _solidColor;
-
-    public void PlaceShield()
+    public enum PlacingCardState
     {
-        //SpriteRenderer currentShield = _shieldSpriteRenderers[PlayerCardRecord.CurrentShieldNumber];
-        //currentShield.enabled = true;
-        //currentShield.color = _solidColor;
-        //CheckWhichCardisBeingPlaced(EnumDefs.Card.Shield);
+        Start,
+        Placing,
+        End
     }
 
-    public void PlaceEnemyShield()
+    //Common
+    [SerializeField] protected CardObjectOnBoardSO CardObjectSO;
+    protected BuildingGrid CurrentTile;
+    protected CardPlacementObject CurrentCreatedObject;
+
+    [SerializeField] protected GameBoardRuleSO _basicGameRuleSO;
+    [Header("Card On Boards")]
+    [SerializeField] protected Color _solidColor;
+    [SerializeField] protected CardRecordOnBoard CardRecord;
+
+    [SerializeField] protected PlacingCardState CurrentCardState;
+
+    protected virtual void PlaceShield(SpriteRenderer currentShield)
     {
-        //SpriteRenderer currentShield = _enemyShieldSpriteRenderers[EnemyCardRecord.CurrentShieldNumber];
-        //currentShield.enabled = true;
-        //currentShield.color = _solidColor;
-        //EnemyCardRecord.CurrentShieldNumber++;
+        currentShield.enabled = true;
+        currentShield.color = _solidColor;
+    }
+
+    protected virtual void PlaceFlag()
+    {
+        if (CurrentCreatedObject.CardObject != null)
+        {
+            return;
+        }
+        CurrentCreatedObject.CardObject = Instantiate(CardObjectSO.GetCardObjectByType(EnumDefs.Card.Flag));
+        CurrentCreatedObject.CardType = EnumDefs.Card.Flag;
+    }
+
+    protected virtual void PlaceCannon()
+    {
+        if (CurrentCreatedObject.CardObject != null)
+        {
+            return;
+        }
+
+        CurrentCreatedObject.CardObject = Instantiate(CardObjectSO.GetCardObjectByType(EnumDefs.Card.Cannon));
+        CurrentCreatedObject.CardType = EnumDefs.Card.Cannon;
+    }
+
+    public virtual void PlacingCardLogic(Action OnTurnFinished)
+    {
+    }
+
+    protected virtual void PlaceingCardState(Action OnPlacingActionFinished)
+    {
+    }
+
+    protected void SwitchCardState(PlacingCardState newState)
+    {
+        CurrentCardState = newState;
     }
 }

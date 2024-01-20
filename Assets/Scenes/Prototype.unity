@@ -4363,7 +4363,8 @@ MonoBehaviour:
   EnemyPaperRockScissors: 0
   _gamePlayUIController: {fileID: 1342379396}
   _paperScissorRockSequenceController: {fileID: 1731615849}
-  _cardPlacementController: {fileID: 0}
+  _playerCardPlacementController: {fileID: 1691908938}
+  _AICardPlacementController: {fileID: 1691908937}
   _paperScissorRockSpriteList: {fileID: 11400000, guid: 4688bf20a2e9496459d776a18d7c901f,
     type: 2}
 --- !u!1 &478385589
@@ -10285,7 +10286,7 @@ Transform:
   m_Children:
   - {fileID: 667527311}
   m_Father: {fileID: 0}
-  m_RootOrder: 13
+  m_RootOrder: 14
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1220090399
 GameObject:
@@ -14648,6 +14649,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1691908936}
+  - component: {fileID: 1691908938}
+  - component: {fileID: 1691908937}
   m_Layer: 0
   m_Name: CardPlacementController
   m_TagString: Untagged
@@ -14670,6 +14673,120 @@ Transform:
   m_Father: {fileID: 667527311}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1691908937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1691908934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3ebc596f54e7be2408baf27ee63bc9d7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CardObjectSO: {fileID: 11400000, guid: 00df3d8f2d36b5f4994e6f5d5707a9ad, type: 2}
+  _basicGameRuleSO: {fileID: 11400000, guid: eda7d1086c58d5646866ac9ce42d1e0e, type: 2}
+  _solidColor: {r: 0.013207495, g: 1, b: 0.07177176, a: 1}
+  CardRecord:
+    CurrentFlagNumber: 0
+    CurrentShieldNumber: 0
+    CurrentCannonNumber: 0
+  CurrentCardState: 0
+  _enemyShieldSpriteRenderers:
+  - {fileID: 1966601547}
+  - {fileID: 623788584}
+  - {fileID: 394623911}
+  - {fileID: 417598115}
+  - {fileID: 865888930}
+  _enemyBuildingGrid:
+  - {fileID: 747334710}
+  - {fileID: 411622436}
+  - {fileID: 1978840701}
+  - {fileID: 1117262444}
+  - {fileID: 684956804}
+  - {fileID: 839639955}
+  - {fileID: 898652598}
+  - {fileID: 1366784713}
+  - {fileID: 1364812652}
+  - {fileID: 1809684518}
+  - {fileID: 1662050938}
+  - {fileID: 478385590}
+  - {fileID: 1472045182}
+  - {fileID: 1176099726}
+  - {fileID: 707442885}
+  - {fileID: 1549988582}
+  - {fileID: 105053926}
+  - {fileID: 2085753270}
+  - {fileID: 1363476291}
+  - {fileID: 46859839}
+  - {fileID: 976751185}
+  - {fileID: 331861905}
+  - {fileID: 1987360017}
+  - {fileID: 1477187834}
+  - {fileID: 2006698426}
+  - {fileID: 1866552061}
+  - {fileID: 995274905}
+  - {fileID: 964876101}
+  - {fileID: 278994042}
+  - {fileID: 1112720045}
+  - {fileID: 549737167}
+  - {fileID: 18154491}
+  - {fileID: 664709113}
+  - {fileID: 1140072459}
+  - {fileID: 1304267176}
+  - {fileID: 893550061}
+  - {fileID: 1472624926}
+  - {fileID: 1253613550}
+  - {fileID: 36652311}
+  - {fileID: 1843519714}
+  - {fileID: 734446780}
+  - {fileID: 1521634732}
+  - {fileID: 334469571}
+  - {fileID: 1961246963}
+  - {fileID: 704323538}
+  - {fileID: 1577247431}
+  - {fileID: 1399226630}
+  - {fileID: 1485879831}
+  - {fileID: 185565232}
+  - {fileID: 1856796848}
+  _AILogicController: {fileID: 0}
+--- !u!114 &1691908938
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1691908934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa069fe1470afd8468d8fcfe0a328579, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CardObjectSO: {fileID: 11400000, guid: 00df3d8f2d36b5f4994e6f5d5707a9ad, type: 2}
+  _basicGameRuleSO: {fileID: 11400000, guid: eda7d1086c58d5646866ac9ce42d1e0e, type: 2}
+  _solidColor: {r: 0.011764706, g: 1, b: 0.07058824, a: 1}
+  CardRecord:
+    CurrentFlagNumber: 0
+    CurrentShieldNumber: 0
+    CurrentCannonNumber: 0
+  CurrentCardState: 0
+  _playerCardController: {fileID: 1342379395}
+  buildingTileMask:
+    serializedVersion: 2
+    m_Bits: 64
+  _onFlagPlacedEvent: {fileID: 11400000, guid: bf6c25954cbe7bd428be231d60ca79fa, type: 2}
+  _onShieldPlacedEvent: {fileID: 11400000, guid: c01d0537e0a188c4cafaa2e32b8e7240,
+    type: 2}
+  _onCannonPlacedEvent: {fileID: 11400000, guid: af09117c6f1c1584390d652791f767c7,
+    type: 2}
+  _shieldSpriteRenderers:
+  - {fileID: 88567476}
+  - {fileID: 866713470}
+  - {fileID: 45834754}
+  - {fileID: 2108052288}
+  - {fileID: 1549311124}
+  _ghostColor: {r: 0.37821007, g: 1, b: 0.29622638, a: 0.5019608}
 --- !u!1 &1714408050
 GameObject:
   m_ObjectHideFlags: 0
@@ -15552,7 +15669,7 @@ RectTransform:
   - {fileID: 1478959919}
   - {fileID: 73152073}
   m_Father: {fileID: 0}
-  m_RootOrder: 14
+  m_RootOrder: 15
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -15929,7 +16046,7 @@ Transform:
   - {fileID: 417598114}
   - {fileID: 865888929}
   m_Father: {fileID: 0}
-  m_RootOrder: 15
+  m_RootOrder: 13
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1904789533
 GameObject:

@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Core.Card;
+using System;
 
 public class PlayerCardPlacementController : BasicCardPlacementController, IInitialization
 {
     [Header("Placement")]
     [SerializeField] private PlayerCardController _playerCardController;
-    private CardPlacementObject currentCreatedObject;
     public LayerMask buildingTileMask;
     private Camera _mainCam;
     private BuildingGrid _previousTitle;
@@ -19,6 +19,12 @@ public class PlayerCardPlacementController : BasicCardPlacementController, IInit
     [SerializeField] private Color _ghostColor;
     private bool _isHoldingCard;
 
+    private bool _hasPlacedShield;
+    private bool _flagButtonEnabled;
+    private bool _shieldButtonEnabled;
+    private bool _cannonButtonEnabled;
+
+
     public void IAwake()
     {
         _mainCam = Camera.main;
@@ -27,26 +33,53 @@ public class PlayerCardPlacementController : BasicCardPlacementController, IInit
     public void IStart()
     {
         //Get Buttom from Name or Enum instead of number.
-        _playerCardController.SubscribeButtonDownEvent(0, () => CreateCardObject(EnumDefs.Card.Flag));
-        _playerCardController.SubscribeButtonDownEvent(1, () => PlaceShield());
-        _playerCardController.SubscribeButtonDownEvent(2, () => CreateCardObject(EnumDefs.Card.Cannon));
+        _playerCardController.SubscribeButtonDownEvent(0, () => PlaceFlag());
+        _playerCardController.SubscribeButtonDownEvent(1, () => PlaceShield(_shieldSpriteRenderers[CardRecord.CurrentShieldNumber]));
+        _playerCardController.SubscribeButtonDownEvent(2, () => PlaceCannon());
+
+        //Eveey battle start
+        EnableAllCardPlacementButton(false);
     }
 
-    public void CreateCardObject(EnumDefs.Card cardType)
+    protected override void PlaceFlag()
     {
-        if (currentCreatedObject.CardObject == null)
+        base.PlaceFlag();
+        _isHoldingCard = true;
+    }
+
+    protected override void PlaceCannon()
+    {
+        base.PlaceCannon();
+        _isHoldingCard = true;
+    }
+
+    protected override void PlaceShield(SpriteRenderer currentShield)
+    {
+        base.PlaceShield(currentShield);
+        _hasPlacedShield = true;
+    }
+
+    public override void PlacingCardLogic(Action OnTurnFinished)
+    {
+        switch (CurrentCardState)
         {
-            currentCreatedObject.CardObject = Instantiate(_cardObjectSO.GetCardObjectByType(cardType));
-            currentCreatedObject.CardType = cardType;
-            _isHoldingCard = true;
+            case PlacingCardState.Start:
+                EnableAllCardPlacementButton(true);
+                SwitchCardState(PlacingCardState.Placing);
+                break;
+            case PlacingCardState.Placing:
+                PlaceingCardState(() => SwitchCardState(PlacingCardState.End));
+                break;
+            case PlacingCardState.End:
+                EnableAllCardPlacementButton(false);
+                SwitchCardState(PlacingCardState.Start);
+                OnTurnFinished?.Invoke();
+                break;
         }
     }
 
-    public void PlayerPlaceingCardAction()
+    protected override void PlaceingCardState(Action OnPlacingActionFinished)
     {
-        _playerCardController.EnableCardPlacementButton(0, true);
-        _playerCardController.EnableCardPlacementButton(1, true);
-        _playerCardController.EnableCardPlacementButton(2, true);
         if (_isHoldingCard)
         {
             Vector3 mouse = Input.mousePosition;
@@ -55,68 +88,99 @@ public class PlayerCardPlacementController : BasicCardPlacementController, IInit
 
             if (Physics.Raycast(castPoint, out hit, Mathf.Infinity, buildingTileMask))
             {
-                currentCreatedObject.CardObject.transform.position = hit.point;
+                CurrentCreatedObject.CardObject.transform.position = hit.point;
                 BuildingGrid tile = hit.transform.GetComponent<BuildingGrid>();
-                if (_currentTile != null)
+                if (CurrentTile != null)
                 {
-                    _previousTitle = _currentTile;
+                    _previousTitle = CurrentTile;
                     _previousTitle.DeSelected();
                 }
 
-                _currentTile = tile;
-                _currentTile.Selected();
+                CurrentTile = tile;
+                CurrentTile.Selected();
                 if (Input.GetKeyUp(KeyCode.Mouse0))
                 {
-                    CheckWhichCardisBeingPlaced(currentCreatedObject.CardType);
-                    //Put this in a method.
-                    currentCreatedObject.CardObject.transform.position = _currentTile.GetTileCenterPosition();
-                    _currentTile.PlaceCard();
-                    _currentTile = null;
-                    currentCreatedObject.CardObject = null;
-                    _isHoldingCard = false;
+                    AddCardToRecrod(CurrentCreatedObject.CardType);
+                    PlaceingCard();
+                    OnPlacingActionFinished?.Invoke();
                 }
             }
         }
+        else if (_hasPlacedShield)
+        {
+            AddCardToRecrod(EnumDefs.Card.Shield);
+            _hasPlacedShield = false;
+            OnPlacingActionFinished?.Invoke();
+        }
     }
 
-    private void CheckWhichCardisBeingPlaced(EnumDefs.Card cardType)
+    public void EnableAllCardPlacementButton(bool isEnabled)
+    {
+        if (isEnabled)
+        {
+            CheckCardCondition();
+            _playerCardController.EnableCardPlacementButton(0, _flagButtonEnabled);
+            _playerCardController.EnableCardPlacementButton(1, _shieldButtonEnabled);
+            _playerCardController.EnableCardPlacementButton(2, _cannonButtonEnabled);
+        }
+        else
+        {
+            _playerCardController.EnableCardPlacementButton(0, false);
+            _playerCardController.EnableCardPlacementButton(1, false);
+            _playerCardController.EnableCardPlacementButton(2, false);
+        }
+    }
+
+    private void HighlighShield()
+    {
+
+    }
+
+    private void PlaceingCard()
+    {
+        CurrentCreatedObject.CardObject.transform.position = CurrentTile.GetTileCenterPosition();
+        CurrentTile.HasCard();
+        CurrentTile = null;
+        CurrentCreatedObject.CardObject = null;
+        _isHoldingCard = false;
+    }
+
+    private void CheckCardCondition()
+    {
+        _flagButtonEnabled = (CardRecord.CurrentFlagNumber >= _basicGameRuleSO.FlagMaximumNumber) ? false : true;
+        _shieldButtonEnabled = (CardRecord.CurrentShieldNumber >= _basicGameRuleSO.ShieldMaximumNumber) ? false : true;
+        _cannonButtonEnabled = (CardRecord.CurrentCannonNumber >= _basicGameRuleSO.CannonMaximumNumber) ? false : true;
+    }
+
+    private void AddCardToRecrod(EnumDefs.Card cardType)
     {
         switch (cardType)
         {
             case EnumDefs.Card.Flag:
-                if (PlayerCardRecord.CurrentFlagNumber < _basicGameRuleSO.FlagMaximumNumber)
+                if (CardRecord.CurrentFlagNumber < _basicGameRuleSO.FlagMaximumNumber)
                 {
-                    PlayerCardRecord.CurrentFlagNumber++;
-                    if (PlayerCardRecord.CurrentFlagNumber >= _basicGameRuleSO.FlagMaximumNumber)
-                    {
-                        _playerCardController.EnableCardPlacementButton(0, false);
-                    }
+                    CardRecord.CurrentFlagNumber++;
                 }
                 _onFlagPlacedEvent.RaiseEvent();
                 break;
             case EnumDefs.Card.Shield:
-                if (PlayerCardRecord.CurrentShieldNumber < _basicGameRuleSO.ShieldMaximumNumber)
+                if (CardRecord.CurrentShieldNumber < _basicGameRuleSO.ShieldMaximumNumber)
                 {
-                    PlayerCardRecord.CurrentShieldNumber++;
-                    if (PlayerCardRecord.CurrentShieldNumber >= _basicGameRuleSO.ShieldMaximumNumber)
-                    {
-                        _playerCardController.EnableCardPlacementButton(1, false);
-                    }
+                    CardRecord.CurrentShieldNumber++;
                 }
                 _onShieldPlacedEvent.RaiseEvent();
                 break;
             case EnumDefs.Card.Cannon:
-                if (PlayerCardRecord.CurrentCannonNumber < _basicGameRuleSO.CannonMaximumNumber)
+                if (CardRecord.CurrentCannonNumber < _basicGameRuleSO.CannonMaximumNumber)
                 {
-                    PlayerCardRecord.CurrentCannonNumber++;
-                    if (PlayerCardRecord.CurrentCannonNumber >= _basicGameRuleSO.CannonMaximumNumber)
-                    {
-                        _playerCardController.EnableCardPlacementButton(2, false);
-                    }
+                    CardRecord.CurrentCannonNumber++;
                 }
                 _onCannonPlacedEvent.RaiseEvent();
                 break;
         }
+        //_playerCardController.EnableCardPlacementButton(0, _flagButtonEnabled);
+        //_playerCardController.EnableCardPlacementButton(1, _shieldButtonEnabled);
+        //_playerCardController.EnableCardPlacementButton(2, _cannonButtonEnabled);
     }
 
     private void OnDisable()

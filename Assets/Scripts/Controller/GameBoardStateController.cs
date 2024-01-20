@@ -25,7 +25,7 @@ public class GameBoardStateController : MonoBehaviour, IInitialization, IUpdateL
     {
         None,
         Player,
-        Enemy
+        Enemy,
     }
 
     public GmaeState gmaeState;
@@ -36,7 +36,8 @@ public class GameBoardStateController : MonoBehaviour, IInitialization, IUpdateL
     [Space(), Header("Reference")]
     [SerializeField] private GamePlayUIController _gamePlayUIController;
     [SerializeField] private PaperScissorRockSequenceController _paperScissorRockSequenceController;
-    [SerializeField] private BasicCardPlacementController _cardPlacementController;
+    [SerializeField] private PlayerCardPlacementController _playerCardPlacementController;
+    [SerializeField] private AICardPlacementController _AICardPlacementController;
     [SerializeField] private SpriteListSO _paperScissorRockSpriteList;
 
     public void IAwake()
@@ -56,10 +57,23 @@ public class GameBoardStateController : MonoBehaviour, IInitialization, IUpdateL
 
     public void IUpdate()
     {
+        if (gmaeState == GmaeState.GameStart)
+        {
+            switch (turnOrder)
+            {
+                case TurnOrder.Player:
+                    _playerCardPlacementController.PlacingCardLogic(SwapTurnOrder);
+                    break;
+                case TurnOrder.Enemy:
+                    _AICardPlacementController.PlacingCardLogic(SwapTurnOrder);
+                    break;
+            }
+        }
     }
 
     public void IFixedUpdate()
     {
+
     }
 
     public void StartPaperScissorRock()
@@ -90,7 +104,7 @@ public class GameBoardStateController : MonoBehaviour, IInitialization, IUpdateL
                 break;
         }
         yield return new WaitForSeconds(1f);
-        _gamePlayUIController.SetEnemyPaperScissorsRockSprite(_paperScissorRockSpriteList.GetRandomSpriteFromList()); 
+        _gamePlayUIController.SetEnemyPaperScissorsRockSprite(_paperScissorRockSpriteList.GetRandomSpriteFromList());
         yield return new WaitForSeconds(1f);
         CheckWhoWinsPeperRockScissors();
     }
@@ -192,6 +206,4 @@ public class GameBoardStateController : MonoBehaviour, IInitialization, IUpdateL
             _gamePlayUIController.PaperScissorRockButtons[i].ClearButtonEvent();
         }
     }
-
-  
 }

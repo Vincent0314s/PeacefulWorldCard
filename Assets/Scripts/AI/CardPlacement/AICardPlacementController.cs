@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Core.Card;
+using System;
 
 public class AICardPlacementController : BasicCardPlacementController, IInitialization
 {
@@ -9,11 +10,10 @@ public class AICardPlacementController : BasicCardPlacementController, IInitiali
     [SerializeField] private SpriteRenderer[] _enemyShieldSpriteRenderers;
     [SerializeField] private BuildingGrid[] _enemyBuildingGrid;
     private List<BuildingGrid> _availableEnemyBuildingGrid;
-    private CardPlacementObject currentEnemyCreatedObject;
-    private BuildingGrid _currentEnemyTile;
 
     [SerializeField] private AILogicController _AILogicController;
 
+    private float _currentPlacingTime;
     public void IAwake()
     {
     }
@@ -23,107 +23,119 @@ public class AICardPlacementController : BasicCardPlacementController, IInitiali
         _availableEnemyBuildingGrid = new List<BuildingGrid>(_enemyBuildingGrid);
     }
 
-    public void AIPlacingCardAction()
+    public void ResetActionValue()
     {
-        //_playerCardController.EnableCardPlacementButton(0, false);
-        //_playerCardController.EnableCardPlacementButton(1, false);
-        //_playerCardController.EnableCardPlacementButton(2, false);
-        if (EnemyCardRecord.CurrentFlagNumber < _basicGameRuleSO.FlagMaximumNumber)
+        _currentPlacingTime = 0;
+    }
+
+    public override void PlacingCardLogic(Action OnTurnFinished)
+    {
+        switch (CurrentCardState)
         {
-            HandleEnemyFlagLogic();
+            case PlacingCardState.Start:
+                ResetActionValue();
+                SwitchCardState(PlacingCardState.Placing);
+                break;
+            case PlacingCardState.Placing:
+                PlaceingCardState(() => SwitchCardState(PlacingCardState.End));
+                break;
+            case PlacingCardState.End:
+                SwitchCardState(PlacingCardState.Start);
+                OnTurnFinished?.Invoke();
+                break;
         }
-        else
+    }
+
+    protected override void PlaceingCardState(Action OnPlacingActionFinished)
+    {
+        int randomPlacingTime = UnityEngine.Random.Range(2, 5);
+        if (_currentPlacingTime < randomPlacingTime)
         {
-            HandleDefStyleAILogic();
+            _currentPlacingTime += Time.deltaTime;
+        }
+        else {
+            if (CardRecord.CurrentFlagNumber < _basicGameRuleSO.FlagMaximumNumber)
+            {
+                HandleEnemyFlagLogic();
+                OnPlacingActionFinished?.Invoke();
+            }
+            else
+            {
+                HandleDefStyleAILogic();
+                OnPlacingActionFinished?.Invoke();
+            }
         }
     }
 
     private void HandleEnemyFlagLogic()
     {
-        switch (EnemyCardRecord.CurrentFlagNumber)
+        PlaceFlag();
+        CardRecord.CurrentFlagNumber++;
+
+        switch (CardRecord.CurrentFlagNumber)
         {
-            case 0:
-                if (currentEnemyCreatedObject.CardObject == null)
-                {
-                    currentEnemyCreatedObject.CardObject = Instantiate(_cardObjectSO.GetCardObjectByType(EnumDefs.Card.Flag));
-                }
-                SetCardInGridPosition(15);
-                EnemyCardRecord.CurrentFlagNumber++;
-                _availableEnemyBuildingGrid[15].enabled = false;
-                break;
             case 1:
-                if (currentEnemyCreatedObject.CardObject == null)
-                {
-                    currentEnemyCreatedObject.CardObject = Instantiate(_cardObjectSO.GetCardObjectByType(EnumDefs.Card.Flag));
-                }
-                SetCardInGridPosition(20);
-                EnemyCardRecord.CurrentFlagNumber++;
-                _availableEnemyBuildingGrid[15].enabled = false;
+                SetCardInGridPosition(15);
                 break;
             case 2:
-                if (currentEnemyCreatedObject.CardObject == null)
-                {
-                    currentEnemyCreatedObject.CardObject = Instantiate(_cardObjectSO.GetCardObjectByType(EnumDefs.Card.Flag));
-                }
+                SetCardInGridPosition(20);
+                break;
+            case 3:
                 SetCardInGridPosition(25);
-                EnemyCardRecord.CurrentFlagNumber++;
-                _availableEnemyBuildingGrid[15].enabled = false;
                 break;
         }
 
 
-        currentEnemyCreatedObject.CardObject = null;
+        CurrentCreatedObject.CardObject = null;
     }
 
     private void HandleDefStyleAILogic()
     {
-        int randomDecsion = Random.Range(0, 100);
+        int randomDecsion = UnityEngine.Random.Range(0, 100);
         if (randomDecsion >= 30)
         {
-            if (EnemyCardRecord.CurrentShieldNumber < _basicGameRuleSO.ShieldMaximumNumber)
+            if (CardRecord.CurrentShieldNumber < _basicGameRuleSO.ShieldMaximumNumber)
             {
-                PlaceEnemyShield();
+                PlaceShield(_enemyShieldSpriteRenderers[CardRecord.CurrentShieldNumber]);
+                CardRecord.CurrentShieldNumber++;
             }
             else
             {
-                //Do other Logic
+                //Place Cannon or attack
             }
         }
         else if (randomDecsion < 30)
         {
-            if (EnemyCardRecord.CurrentCannonNumber < _basicGameRuleSO.CannonMaximumNumber)
+            if (CardRecord.CurrentCannonNumber < _basicGameRuleSO.CannonMaximumNumber)
             {
-                if (currentEnemyCreatedObject.CardObject == null)
-                {
-                    currentEnemyCreatedObject.CardObject = Instantiate(_cardObjectSO.GetCardObjectByType(EnumDefs.Card.Cannon));
-                }
-                int randomPosition = Random.Range(0, _availableEnemyBuildingGrid.Count);
+                int randomPosition = UnityEngine.Random.Range(0, _availableEnemyBuildingGrid.Count);
                 if (!_availableEnemyBuildingGrid[randomPosition].enabled)
                 {
                     return;
                 }
                 else
                 {
+                    PlaceCannon();
                     SetCardInGridPosition(randomPosition);
-                    _availableEnemyBuildingGrid[randomPosition].enabled = false;
-                    EnemyCardRecord.CurrentCannonNumber++;
+                    CardRecord.CurrentCannonNumber++;
                 }
             }
             else
             {
-                //Do other Logic
+                //Place Shield or attack
             }
         }
 
-        currentEnemyCreatedObject.CardObject = null;
+        CurrentCreatedObject.CardObject = null;
     }
 
     private void SetCardInGridPosition(int positionIndex)
     {
-        if (currentEnemyCreatedObject.CardObject != null)
+        if (CurrentCreatedObject.CardObject != null)
         {
-            _currentEnemyTile = _enemyBuildingGrid[positionIndex];
-            currentEnemyCreatedObject.CardObject.transform.position = _currentEnemyTile.GetTileCenterPosition();
+            CurrentTile = _enemyBuildingGrid[positionIndex];
+            CurrentCreatedObject.CardObject.transform.position = CurrentTile.GetTileCenterPosition();
+            _availableEnemyBuildingGrid[positionIndex].enabled = false;
         }
     }
 

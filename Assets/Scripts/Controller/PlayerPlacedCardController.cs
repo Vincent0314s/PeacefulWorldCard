@@ -54,5 +54,4 @@ public class PlayerPlacedCardController : MonoBehaviour,IInitialization
             }
         }
     }
-
 }
