@@ -147,9 +147,9 @@ public class CharacterRotationBehaviour : CharacterBehaviour
 
         _relativeMaximum = _characterBase.transform.TransformVector(Vector3.one);
 
-        _remappedSpeed.x = Remap(_relativeSpeed.x, 0f, maxSpeed, 0f, _relativeMaximum.x);
-        _remappedSpeed.y = Remap(_relativeSpeed.y, 0f, maxSpeed, 0f, _relativeMaximum.y);
-        _remappedSpeed.z = Remap(_relativeSpeed.z, 0f, maxSpeed, 0f, _relativeMaximum.z);
+        _remappedSpeed.x = MathUtility.Remap(_relativeSpeed.x, 0f, maxSpeed, 0f, _relativeMaximum.x);
+        _remappedSpeed.y = MathUtility.Remap(_relativeSpeed.y, 0f, maxSpeed, 0f, _relativeMaximum.y);
+        _remappedSpeed.z = MathUtility.Remap(_relativeSpeed.z, 0f, maxSpeed, 0f, _relativeMaximum.z);
 
         // relative speed normalized
         _relativeSpeedNormalized = _relativeSpeed.normalized;
@@ -192,13 +192,6 @@ public class CharacterRotationBehaviour : CharacterBehaviour
                 _newMovementQuaternion = Quaternion.LookRotation(Vector3.left);
                 break;
         }
-    }
-
-
-    public float Remap(float x, float A, float B, float C, float D)
-    {
-        float remappedValue = C + (x - A) / (B - A) * (D - C);
-        return remappedValue;
     }
 
     private void Reset()

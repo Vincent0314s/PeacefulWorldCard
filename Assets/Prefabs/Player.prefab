@@ -1,5 +1,49 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4505361331573713964
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 878825599400198048}
+  - component: {fileID: 6004486504288771183}
+  m_Layer: 0
+  m_Name: CameraFollowPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &878825599400198048
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4505361331573713964}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 990775799629848225}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6004486504288771183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4505361331573713964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 554c80860799ab048921a4b081bd2f0f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6740533565047762743
 GameObject:
   m_ObjectHideFlags: 0
@@ -35,6 +79,7 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 8267019283275040143}
+  - {fileID: 878825599400198048}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!143 &5190894687510252124
@@ -81,6 +126,7 @@ MonoBehaviour:
   ImpactFalloff: 5
   CharacterModel: {fileID: 8786956700270305077}
   CharacterAnimator: {fileID: 2619536873543180277}
+  CharacterCamera: {fileID: 0}
   InputMoveDirection: {x: 0, y: 0, z: 0}
   Speed: {x: 0, y: 0, z: 0}
   Velocity: {x: 0, y: 0, z: 0}
@@ -107,6 +153,7 @@ MonoBehaviour:
   Acceleration: 10
   Deceleration: 100
   IdleThreshold: 0.05
+  RotateInputBasedOnCameraDirection: 1
 --- !u!114 &668206182601679663
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -139,6 +186,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b07fdf9cbde93b64fa2be316ca5e1c08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  RotateInputBasedOnCameraDirection: 1
 --- !u!1001 &2860555317051056472
 PrefabInstance:
   m_ObjectHideFlags: 0

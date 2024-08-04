@@ -36,6 +36,7 @@ public class CharacterBase : MonoBehaviour
     [Header("Reference"), Space()]
     public GameObject CharacterModel;
     public Animator CharacterAnimator;
+    public Camera CharacterCamera;
 
     [Header("Debug"), ReadOnly, Space()]
     public Vector3 InputMoveDirection;
@@ -65,6 +66,10 @@ public class CharacterBase : MonoBehaviour
         _characterController = GetComponent<CharacterController>();
         _characterBehaviours = GetComponents<CharacterBehaviour>();
         _inputController = GetComponent<PlayerInputController>();
+        if (CharacterCamera == null)
+        {
+            CharacterCamera = Camera.main;
+        }
     }
 
     private void Start()

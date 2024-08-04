@@ -8,12 +8,16 @@ public class CharacterMovementBehaviour : CharacterBehaviour
     public float Acceleration;
     public float Deceleration;
     public float IdleThreshold;
+    public bool RotateInputBasedOnCameraDirection;
 
+    //Movement Variable
     public float MovementSpeed { get; set; }
     protected Vector3 _movementVector;
     protected Vector2 _currentInput;
-    protected float _horizontalMovement;
-    protected float _verticalMovement;
+
+    //protected float _horizontalMovement;
+    //protected float _verticalMovement;
+
     protected Vector2 _normalizedInput;
     protected Vector2 _lerpedInput;
     private float _acceleration;
@@ -27,12 +31,16 @@ public class CharacterMovementBehaviour : CharacterBehaviour
         set => _movementSpeedMultiplier = value;
     }
 
+    //Camera Variable
+    protected float _cameraAngle;
+
     protected override void StartInitialization()
     {
         base.StartInitialization();
         MovementSpeedMultiplier = 1f;
         MovementSpeed = WalkSpeed;
     }
+
 
     public override void ProcessBehaviour()
     {
@@ -43,11 +51,13 @@ public class CharacterMovementBehaviour : CharacterBehaviour
     {
         _movementVector = Vector3.zero;
         _currentInput = Vector2.zero;
-        _horizontalMovement = _horizontalInput;
-        _verticalMovement = _verticalInput;
 
-        _currentInput.x = _horizontalMovement;
-        _currentInput.y = _verticalMovement;
+        _currentInput.x = _horizontalInput;
+        _currentInput.y = _verticalInput;
+        if (RotateInputBasedOnCameraDirection)
+        {
+            _currentInput = ApplyCameraRotation(_currentInput);
+        }
 
         _normalizedInput = _currentInput.normalized;
 
@@ -113,6 +123,19 @@ public class CharacterMovementBehaviour : CharacterBehaviour
     public override void UpdateAnimator()
     {
         _animator.SetFloat("MoveSpeed", _movementVector.magnitude);
+    }
+
+    public Vector2 ApplyCameraRotation(Vector2 input)
+    {
+        if (RotateInputBasedOnCameraDirection)
+        {
+            _cameraAngle = _characterBase.CharacterCamera.transform.localEulerAngles.y;
+            return MathUtility.RotateVector2(input, -_cameraAngle);
+        }
+        else
+        {
+            return input;
+        }
     }
 
     private void Reset()
