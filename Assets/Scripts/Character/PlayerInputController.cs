@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-public class PlayerInputController : MonoBehaviour
+public class PlayerInputController : MonoBehaviour, IInitialization, IInitiazationEnable
 {
     public static PlayerInputController Instance { get; private set; }
     private KeyCode _interactableKey = KeyCode.E;
@@ -20,7 +21,19 @@ public class PlayerInputController : MonoBehaviour
     public Vector2 MoveInput { get; private set; }
     public Vector3 MousePosition { get; private set; }
 
-    private void Awake()
+    private PlayerInputActions playerInputActions;
+
+    [Header("PlayerInput")]
+    private InputAction movement;
+    private InputAction rotateCamera;
+    private InputAction zoomCamera;
+
+    private InputAction mouseLeftClick;
+    private InputAction mouseRightClick;
+
+    private InputAction spaceKey;
+
+    public void IAwake()
     {
         if (Instance != null && Instance != this)
         {
@@ -30,7 +43,48 @@ public class PlayerInputController : MonoBehaviour
         {
             Instance = this;
         }
+
+        playerInputActions = new PlayerInputActions();
     }
+
+    public void IStart()
+    {
+    }
+
+    public void IEnable()
+    {
+        movement = playerInputActions.Player.Move;
+        rotateCamera = playerInputActions.Player.RotateCamera;
+        zoomCamera = playerInputActions.Player.ZoomCamera;
+
+        spaceKey = playerInputActions.Player.SpaceKey;
+
+        mouseLeftClick = playerInputActions.Player.MouseLeftClick;
+        mouseRightClick = playerInputActions.Player.MouseRightClick;
+
+        playerInputActions.Player.Enable();
+    }
+
+    public void IDisable()
+    {
+        playerInputActions.Player.Disable();
+    }
+
+    public Vector2 GetWASDMovementValue()
+    {
+        return movement.ReadValue<Vector2>();
+    }
+
+    public float GetRotateCameraValue()
+    {
+        return rotateCamera.ReadValue<Vector2>().x;
+    }
+
+    public float GetZoomCameraValue()
+    {
+        return zoomCamera.ReadValue<Vector2>().y;
+    }
+
 
     public void ProcessInputBehaviour()
     {

@@ -10,7 +10,10 @@ public class PlayerCardController : MonoBehaviour
 
     public void SubscribeButtonDownEvent(int buttonIndex, Action buttonEvent)
     {
-        playerCards[buttonIndex].AddButtonDownEvent(buttonEvent);
+        if (playerCards.Length > 0)
+        {
+            playerCards[buttonIndex].AddButtonDownEvent(buttonEvent);
+        }
     }
 
     public void UnSubscribeAllButtonEvents()
@@ -23,7 +26,10 @@ public class PlayerCardController : MonoBehaviour
 
     public void EnableCardPlacementButton(int buttonIndex, bool enabledCard)
     {
-        playerCards[buttonIndex].GetComponent<Button>().interactable = enabledCard;
-        playerCards[buttonIndex].EnableEventTrigger(enabledCard);
+        if (playerCards.Length > 0)
+        {
+            playerCards[buttonIndex].GetComponent<Button>().interactable = enabledCard;
+            playerCards[buttonIndex].EnableEventTrigger(enabledCard);
+        }
     }
 }

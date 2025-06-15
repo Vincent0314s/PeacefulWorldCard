@@ -7,20 +7,38 @@ using UnityEngine;
 public class GameInitializationController : MonoBehaviour
 {
     private List<IInitialization> _initializations;
+    private List<IInitiazationEnable> _initiazationEnables;
     private void Awake()
     {
         _initializations = new List<IInitialization>(GetComponentsInChildren<IInitialization>());
-        for (int i = 0; i < _initializations.Count; i++)
+        _initiazationEnables = new List<IInitiazationEnable>(GetComponentsInChildren<IInitiazationEnable>());
+        foreach (var item in _initializations)
         {
-            _initializations[i].IAwake();
+            item.IAwake();
+        }
+    }
+
+    private void OnEnable()
+    {
+        foreach (var item in _initiazationEnables)
+        {
+            item.IEnable();
+        }
+    }
+
+    private void OnDisable()
+    {
+        foreach (var item in _initiazationEnables)
+        {
+            item.IDisable();
         }
     }
 
     private void Start()
     {
-        for (int i = 0; i < _initializations.Count; i++)
+        foreach (var item in _initializations)
         {
-            _initializations[i].IStart();
+            item.IStart();
         }
     }
 }
