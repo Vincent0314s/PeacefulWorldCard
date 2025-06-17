@@ -1,12 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Security.Cryptography;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
+using DG.Tweening;
 
-public class CardVisual : MonoBehaviour
+public class CardVisual : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler, IPointerEnterHandler, IPointerExitHandler, IPointerUpHandler, IPointerDownHandler
 {
     private bool initalize = false;
 
@@ -41,8 +40,8 @@ public class CardVisual : MonoBehaviour
     [SerializeField] private bool scaleAnimations = true;
     [SerializeField] private float scaleOnHover = 1.15f;
     [SerializeField] private float scaleOnSelect = 1.25f;
-    [SerializeField]
-    private float scaleTransition = .15f;
+    [SerializeField] private float scaleTransition = .15f;
+    [SerializeField] private Ease scaleEase = Ease.OutBack;
 
     [Header("Select Parameters")]
     [SerializeField] private float selectPunchAmount = 20;
@@ -129,5 +128,42 @@ public class CardVisual : MonoBehaviour
     public float NormalizedPosition()
     {
         return ExtensionMethods.Remap((float)ParentIndex(), 0, (float)(transform.parent.childCount - 1), 0, 1);
+    }
+
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        tiltParent.DOScale(scaleOnHover, scaleTransition).SetEase(scaleEase);
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        tiltParent.DOScale(1, scaleTransition).SetEase(scaleEase);
+    }
+
+
+    public void OnDrag(PointerEventData eventData)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnBeginDrag(PointerEventData eventData)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnEndDrag(PointerEventData eventData)
+    {
+        throw new System.NotImplementedException();
+    }
+
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        throw new System.NotImplementedException();
+    }
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        throw new System.NotImplementedException();
     }
 }
